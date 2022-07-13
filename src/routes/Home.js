@@ -59,10 +59,22 @@ function Home() {
               </NavDropdown>
               <Nav.Link href="#action2">지도로 검색</Nav.Link>
             </Nav>
-            <Form className="d-flex">
-              <Form.Control type="search" placeholder="유럽 여행" className="me-2" aria-label="Search" />
-              <Button variant="outline-success">Search</Button>
-            </Form>
+            <Nav>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                로그인
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/signUp");
+                }}
+              >
+                회원가입
+              </Nav.Link>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
