@@ -7,7 +7,7 @@
   padding: 60px;
   display: flex;
   flex-direction: column;
-  font-family: "Jua", serif;
+  font-family: "1009", serif;
   align-items: center;
 }
 .loginBox div {
@@ -36,7 +36,7 @@
   font-size: 30px;
   margin-top: 60px;
   background: #ecb390;
-  font-family: "Jua", serif;
+  font-family: "1009", serif;
   color: #fff;
 }
 

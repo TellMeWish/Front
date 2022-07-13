@@ -7,16 +7,16 @@ let Card = styled.div`
   align-items: center;
   padding: 60px;
   justify-content: space-between;
-  font-family: "Hahmlet", serif;
+  font-family: "1009", serif;
 `;
 let Btn = styled.button`
   width: 350px;
   height: 120px;
-  background: #ecb390;
+  background: var(--color-beige);
   border-radius: 10px;
   border: none;
   font-size: 30px;
-  font-family: "Jua", serif;
+  font-family: "1009", serif;
   color: #fff;
   &:hover {
     background: #e99f71;
@@ -37,7 +37,7 @@ function Home() {
           <span>공유해보세요</span>
         </div>
       </Card>
-      <Card bg="#FCF8E8">
+      <Card bg="var(--color-skin)">
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-start" }}>
           <span>내 삶의 목표를</span>
           <span>소원을말해봐와</span>
@@ -52,7 +52,9 @@ function Home() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
           <span>지금</span>
-          <span>나만의 버킷리스트를</span>
+          <span>
+            <span style={{ color: "var(--color-beige)" }}>나만의 버킷리스트</span>를
+          </span>
           <span>만들어보세요</span>
         </div>
       </Card>

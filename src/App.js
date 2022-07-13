@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import { Navbar, Container, Nav, NavDropdown, Form, Button } from "react-bootstrap";
+import { lazy } from "react";
+import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
@@ -10,7 +11,7 @@ function App() {
   let navigate = useNavigate();
   return (
     <div className="App">
-      <Navbar expand="lg" className="nav_bar" style={{ fontFamily: "Jua" }}>
+      <Navbar expand="lg" className="nav_bar" style={{ fontFamily: "1009" }}>
         <Container fluid>
           <Navbar.Brand
             onClick={() => {

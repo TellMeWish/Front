@@ -1,10 +1,23 @@
+@font-face {
+  font-family: "1009";
+  src: url("/public/fonts/a시월구일1.ttf") format("truetype");
+  font-weight: normal;
+}
+
+:root {
+  --color-beige: #ecb390;
+  --color-skin: #fcf8e8;
+  --color-light-green: #cee5d0;
+  --color-green: #94b49f;
+}
 body {
   margin-top: 100px;
 }
 .nav_bar {
   width: 100%;
   height: 100px;
-  background-color: #ecb390;
+  background-color: var(--color-beige);
   position: fixed;
   top: 0px;
+  font-family: "1009";
 }
