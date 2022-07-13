@@ -1,7 +1,10 @@
 .App {
   text-align: center;
 }
-
+.nav_bar {
+  height: 100px;
+  background-color: #ffb562;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
