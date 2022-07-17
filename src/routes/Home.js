@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 let Card = styled.div`
   height: 600px;
   background: ${(props) => props.bg};
@@ -47,7 +48,21 @@ function Home() {
       </Card>
       <Card>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <Btn style={{ marginBottom: "48px" }}>버킷리스트 등록</Btn>
+          <Btn
+            style={{ marginBottom: "48px" }}
+            onClick={() => {
+              axios
+                .get("https://codingapple1.github.io/shop/data2.json")
+                .then((data) => {
+                  console.log(data);
+                })
+                .catch(() => {
+                  console.log("TT");
+                });
+            }}
+          >
+            버킷리스트 등록
+          </Btn>
           <Btn>목록 보기</Btn>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
