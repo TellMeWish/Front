@@ -51,19 +51,20 @@ function Home() {
           <Btn
             style={{ marginBottom: "48px" }}
             onClick={() => {
-              axios
-                .get("https://codingapple1.github.io/shop/data2.json")
-                .then((data) => {
-                  console.log(data);
-                })
-                .catch(() => {
-                  console.log("TT");
-                });
+              axios.get(`http://13.209.145.95:8081/post/postList?page=0&size=3`).then((res) => {
+                console.log(res);
+              });
             }}
           >
             버킷리스트 등록
           </Btn>
-          <Btn>목록 보기</Btn>
+          <Btn
+            onClick={() => {
+              navigate("/postList");
+            }}
+          >
+            목록 보기
+          </Btn>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
           <span>지금</span>

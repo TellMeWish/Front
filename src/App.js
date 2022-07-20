@@ -4,6 +4,7 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
+import PostList from "./routes/PostList";
 import { useNavigate } from "react-router-dom";
 import "./css/App.css";
 
@@ -26,7 +27,7 @@ function App() {
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
               <Nav.Link
                 onClick={() => {
-                  navigate("/");
+                  navigate("/postList");
                 }}
               >
                 버킷리스트 목록
@@ -61,6 +62,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<Signup />} />
+        <Route path="/postList" element={<PostList />} />
       </Routes>
     </div>
   );
