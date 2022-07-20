@@ -8,7 +8,6 @@ let Card = styled.div`
   align-items: center;
   padding: 60px;
   justify-content: space-between;
-  font-family: "1009", serif;
 `;
 let Btn = styled.button`
   width: 350px;
@@ -17,7 +16,6 @@ let Btn = styled.button`
   border-radius: 10px;
   border: none;
   font-size: 30px;
-  font-family: "1009", serif;
   color: #fff;
   &:hover {
     background: #e99f71;

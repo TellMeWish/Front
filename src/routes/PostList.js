@@ -2,11 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import axios from "axios";
+import "../css/PostList.css";
 let Post = styled.div`
-  width: 400px;
+  width: 800px;
   height: 400px;
-  border: 1px solid black;
   padding: 20px;
+  background: var(--color-light-green);
+  margin-top: 200px;
+  display: flex;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  img {
+    width: 400px;
+  }
+  div {
+    padding: 10px;
+  }
 `;
 
 function PostList() {
@@ -19,7 +29,7 @@ function PostList() {
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=3`)
+      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=4`)
       .then((res) => {
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.content]);
@@ -47,16 +57,18 @@ function PostList() {
 
   console.log(items);
   return (
-    <div>
+    <div style={{ background: "var(--color-skin)" }}>
       <div className="postList">
         {items?.map((item, i) => {
           if (item)
             return items.length - 1 == i && page <= items.length / 3 ? (
               <Post ref={ref}>
+                <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
                 <div>제목 : {item.title}</div>
               </Post>
             ) : (
               <Post>
+                <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
                 <div>제목 : {item.title}</div>
               </Post>
             );
