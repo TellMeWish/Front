@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 let Card = styled.div`
   height: 600px;
   background: ${(props) => props.bg};
@@ -7,7 +8,6 @@ let Card = styled.div`
   align-items: center;
   padding: 60px;
   justify-content: space-between;
-  font-family: "1009", serif;
 `;
 let Btn = styled.button`
   width: 350px;
@@ -16,7 +16,6 @@ let Btn = styled.button`
   border-radius: 10px;
   border: none;
   font-size: 30px;
-  font-family: "1009", serif;
   color: #fff;
   &:hover {
     background: #e99f71;
@@ -47,8 +46,23 @@ function Home() {
       </Card>
       <Card>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <Btn style={{ marginBottom: "48px" }}>버킷리스트 등록</Btn>
-          <Btn>목록 보기</Btn>
+          <Btn
+            style={{ marginBottom: "48px" }}
+            onClick={() => {
+              axios.get(`http://13.209.145.95:8081/post/postList?page=0&size=3`).then((res) => {
+                console.log(res);
+              });
+            }}
+          >
+            버킷리스트 등록
+          </Btn>
+          <Btn
+            onClick={() => {
+              navigate("/postList");
+            }}
+          >
+            목록 보기
+          </Btn>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
           <span>지금</span>

@@ -3,6 +3,11 @@
   src: url("/public/fonts/a시월구일1.ttf") format("truetype");
   font-weight: normal;
 }
+* {
+  box-sizing: border-box;
+
+  font-family: "1009", serif;
+}
 
 :root {
   --color-beige: #ecb390;
