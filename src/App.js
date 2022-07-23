@@ -4,6 +4,7 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
+import PostWrtie from "./routes/PostWrite";
 import { useNavigate } from "react-router-dom";
 import "./css/App.css";
 
@@ -60,7 +61,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<Signup />} />
+        <Route path="/signUp" element={<Signup/>} />
+        <Route path="/postwrite" element={<PostWrtie/>} />
       </Routes>
     </div>
   );
