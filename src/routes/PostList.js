@@ -28,7 +28,7 @@ function PostList() {
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=9`)
+      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=1`)
       .then((res) => {
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.content]);
