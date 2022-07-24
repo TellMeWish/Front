@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import { lazy } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
-import PostWrtie from "./routes/PostWrite";
+import CreatePost from "./routes/CreatePost";
 import PostList from "./routes/PostList";
 import { useNavigate } from "react-router-dom";
 import "./css/App.css";
@@ -64,7 +63,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<Signup />} />
         <Route path="/postList" element={<PostList />} />
-        <Route path="/postwrite" element={<PostWrtie />} />
+        <Route path="/createPost" element={<CreatePost />} />
       </Routes>
     </div>
   );

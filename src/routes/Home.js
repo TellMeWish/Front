@@ -49,9 +49,7 @@ function Home() {
           <Btn
             style={{ marginBottom: "48px" }}
             onClick={() => {
-              axios.get(`http://13.209.145.95:8081/post/postList?page=0&size=3`).then((res) => {
-                console.log(res);
-              });
+              navigate("/createPost");
             }}
           >
             버킷리스트 등록
