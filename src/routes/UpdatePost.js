@@ -1,20 +1,32 @@
 import "../css/createPost.css";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-function CreatePost() {
+function UpdatePost() {
   let navigate = useNavigate();
+  let { id } = useParams();
 
+  const [item, setItem] = useState("");
   const [isPrivate, setIsPrivate] = useState(0);
   const [isParticipate, setIsParticipate] = useState(0);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  useEffect(() => {
+    axios.get(`http://13.209.145.95:8081/post/${id}`).then((res) => {
+      const post = res.data.post;
+      document.getElementById("content").value = post.content;
+      document.getElementById("title").value = post.title;
+      document.getElementById("category").value = post.category;
+      document.getElementById("isPrivate").checked = post.isPrivate;
+      document.getElementById("isParticipate").checked = post.isParticipate;
+    });
+  }, []);
   const submitPost = async (event) => {
     event.preventDefault();
     const config = {
-      method: "post",
-      url: `http://13.209.145.95:8081/post`,
+      method: "update",
+      url: `http://13.209.145.95:8081/post/${id}`,
       data: {
         userId: 1,
         isPrivate: isPrivate,
@@ -34,14 +46,16 @@ function CreatePost() {
         alert("실패");
       });
   };
+
   return (
     <div className="container">
       <form className="createForm" onSubmit={submitPost}>
         <div className="checkList">
           <div className="checkList">
             <div style={{ marginRight: "20px" }}>
-              비공개{" "}
+              공개 여부{" "}
               <input
+                id="isPrivate"
                 type="checkbox"
                 name="isPrivate"
                 onChange={(e) => {
@@ -52,6 +66,7 @@ function CreatePost() {
             <div>
               참여 여부{" "}
               <input
+                id="isPrivate"
                 type="checkbox"
                 name="isParticipate"
                 onChange={(e) => {
@@ -62,13 +77,12 @@ function CreatePost() {
           </div>
           <div className="category">
             <select
+              id="category"
               onChange={(e) => {
                 setCategory(e.target.value);
               }}
             >
-              <option value="" selected>
-                ===선택===
-              </option>
+              <option value="">===선택===</option>
               <option value="여행1">여행1</option>
               <option value="여행2">여행2</option>
               <option value="여행3">여행3</option>
@@ -79,6 +93,7 @@ function CreatePost() {
         <div className="formBox">
           <div>제목</div>
           <input
+            id="title"
             className="text"
             type="text"
             onChange={(e) => {
@@ -89,6 +104,7 @@ function CreatePost() {
         <div className="formBox" style={{ alignItems: "flex-start" }}>
           <div>내용</div>
           <textarea
+            id="content"
             placeholder="여기에 입력하세요"
             onChange={(e) => {
               setContent(e.target.value);
@@ -96,12 +112,11 @@ function CreatePost() {
           ></textarea>
         </div>
         <div className="buttonBox">
-          <button type="submit">등록하기</button>
-          <button>초기화하기</button>
+          <button type="submit">수정하기</button>
         </div>
       </form>
     </div>
   );
 }
 
-export default CreatePost;
+export default UpdatePost;

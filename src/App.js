@@ -5,6 +5,8 @@ import Login from "./routes/Login";
 import Signup from "./routes/Signup";
 import CreatePost from "./routes/CreatePost";
 import PostList from "./routes/PostList";
+import Detail from "./routes/Detail";
+import UpdatePost from "./routes/UpdatePost";
 import { useNavigate } from "react-router-dom";
 import "./css/App.css";
 
@@ -71,6 +73,8 @@ function App() {
         <Route path="/signUp" element={<Signup />} />
         <Route path="/postList" element={<PostList />} />
         <Route path="/createPost" element={<CreatePost />} />
+        <Route path="/updatePost/:id" element={<UpdatePost />} />
+        <Route path="/detail/:id" element={<Detail />} />
       </Routes>
     </div>
   );

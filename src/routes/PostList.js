@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import axios from "axios";
 import "../css/PostList.css";
+import { useNavigate } from "react-router-dom";
 let Post = styled.div`
   width: 350px;
   height: 400px;
@@ -16,9 +17,11 @@ let Post = styled.div`
     width: 300px;
     height: 200px;
   }
+  cursor: grab;
 `;
 
 function PostList() {
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -29,7 +32,7 @@ function PostList() {
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=9`)
+      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=100`)
       .then((res) => {
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.content]);
@@ -56,14 +59,18 @@ function PostList() {
     }
   }, [inView]);
 
-  console.log(isLoading);
   return (
     <div style={{ background: "var(--color-skin)", width: "100%" }}>
       <div className="postList">
-        {items?.map((item, i) => {
+        {items.map((item, i) => {
           if (item) {
             return items.length - 1 == i ? (
-              <Post className="hi" ref={ref}>
+              <Post
+                ref={ref}
+                onClick={() => {
+                  navigate(`/detail/${item.id}`);
+                }}
+              >
                 <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
@@ -79,7 +86,11 @@ function PostList() {
                 </div>
               </Post>
             ) : (
-              <Post>
+              <Post
+                onClick={() => {
+                  navigate(`/detail/${item.id}`);
+                }}
+              >
                 <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
