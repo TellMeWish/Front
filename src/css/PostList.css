@@ -32,3 +32,19 @@
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
+.loading {
+  height: 40px;
+  width: 40px;
+  background: var(--color-skin);
+  border-radius: 50%;
+  border-top: 2px solid #1d9af2;
+  border-right: 2px solid transparent;
+  border-bottom: none;
+  border-left: none;
+  animation: spinner5 700ms linear infinite;
+}
+@keyframes spinner5 {
+  to {
+    transform: rotate(360deg);
+  }
+}

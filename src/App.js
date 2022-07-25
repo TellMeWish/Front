@@ -32,6 +32,13 @@ function App() {
               >
                 버킷리스트 목록
               </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/createPost");
+                }}
+              >
+                버킷리스트 등록
+              </Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
                 <NavDropdown.Item href="#action3">여행하기</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">이것</NavDropdown.Item>

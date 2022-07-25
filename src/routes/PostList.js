@@ -22,13 +22,14 @@ function PostList() {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [ref, inView] = useInView();
 
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=1`)
+      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=9`)
       .then((res) => {
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.content]);
@@ -47,12 +48,15 @@ function PostList() {
   useEffect(() => {
     // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
     if (inView && !loading) {
+      setIsLoading(true);
       setTimeout(() => {
         setPage((prevState) => prevState + 1);
+        setIsLoading(0);
       }, 3000);
     }
   }, [inView]);
 
+  console.log(isLoading);
   return (
     <div style={{ background: "var(--color-skin)", width: "100%" }}>
       <div className="postList">
@@ -94,6 +98,11 @@ function PostList() {
           }
         })}
       </div>
+      {isLoading ? (
+        <div style={{ paddingBottom: "50px", display: "flex", justifyContent: "center" }}>
+          <button className="loading"></button>
+        </div>
+      ) : null}
     </div>
   );
 }

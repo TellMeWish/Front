@@ -17,6 +17,10 @@
 .category {
   display: flex;
 }
+.category select {
+  width: 100px;
+  height: 30px;
+}
 .formBox {
   display: flex;
   margin-bottom: 20px;
