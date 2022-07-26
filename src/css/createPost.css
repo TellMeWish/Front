@@ -2,6 +2,7 @@
   width: 800px;
   background: var(--color-skin);
   padding: 50px;
+  border: solid 1px black;
 }
 
 .checkList {

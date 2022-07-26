@@ -34,6 +34,12 @@ function App() {
               >
                 버킷리스트 목록
               </Nav.Link>
+              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="#action3">여행하기</NavDropdown.Item>
+                <NavDropdown.Item href="#action4">이것</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">저것</NavDropdown.Item>
+              </NavDropdown>
+
               <Nav.Link
                 onClick={() => {
                   navigate("/createPost");
@@ -41,12 +47,7 @@ function App() {
               >
                 버킷리스트 등록
               </Nav.Link>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">여행하기</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">이것</NavDropdown.Item>
-                <NavDropdown.Item href="#action5">저것</NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link href="#action2">지도로 검색</Nav.Link>
+              <Nav.Link>지도로 검색</Nav.Link>
             </Nav>
             <Nav>
               <Nav.Link

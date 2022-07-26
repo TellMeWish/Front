@@ -25,4 +25,5 @@ body {
   position: fixed;
   top: 0px;
   font-family: "1009";
+  z-index: 1;
 }

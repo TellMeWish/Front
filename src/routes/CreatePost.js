@@ -35,7 +35,7 @@ function CreatePost() {
       });
   };
   return (
-    <div className="container">
+    <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
       <form className="createForm" onSubmit={submitPost}>
         <div className="checkList">
           <div className="checkList">

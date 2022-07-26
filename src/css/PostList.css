@@ -48,3 +48,35 @@
     transform: rotate(360deg);
   }
 }
+
+.topBtn {
+  position: fixed;
+  opacity: 0;
+  bottom: 40px;
+  right: 40px;
+  z-index: -10;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 0 none;
+  background: var(--color-light-green);
+  color: var(--color-green);
+  border: 2px solid var(--color-green);
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: -0.06em;
+  box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: opacity 0.3s ease-in;
+}
+
+.topBtn.active {
+  z-index: 10;
+  opacity: 1;
+}
+
+.topBtn:hover,
+.topBtn:focus,
+.topBtn:active {
+  outline: 0 none;
+}

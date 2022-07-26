@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 let Card = styled.div`
@@ -24,7 +25,9 @@ let Btn = styled.button`
 
 function Home() {
   let navigate = useNavigate();
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     //버킷리스트 목록, 카테고리, 프로필, 지도, 검색창, 로그인/회원가입
     <div>

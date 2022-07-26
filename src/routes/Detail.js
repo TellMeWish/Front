@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import "../css/Detail.css";
 
 function Detail() {
   const navigate = useNavigate();
@@ -27,23 +28,25 @@ function Detail() {
   };
   return (
     <div>
-      <div>{post.title}</div>
-      <div>{post.content}</div>
-      <div>{post.category}</div>
-      <button
-        onClick={() => {
-          navigate(`/updatePost/${id}`);
-        }}
-      >
-        수정
-      </button>
-      <button
-        onClick={() => {
-          deletePost();
-        }}
-      >
-        삭제
-      </button>
+      <div className="postBox">
+        <div>{post.title}</div>
+        <div>{post.content}</div>
+        <div>{post.category}</div>
+        <button
+          onClick={() => {
+            navigate(`/updatePost/${id}`);
+          }}
+        >
+          수정
+        </button>
+        <button
+          onClick={() => {
+            deletePost();
+          }}
+        >
+          삭제
+        </button>
+      </div>
     </div>
   );
 }
