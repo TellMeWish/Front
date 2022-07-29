@@ -2,6 +2,7 @@ import "../css/createPost.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { url } from "../Url";
 function CreatePost() {
   let navigate = useNavigate();
 
@@ -14,7 +15,7 @@ function CreatePost() {
     event.preventDefault();
     const config = {
       method: "post",
-      url: `http://13.209.145.95:8081/post`,
+      url: `${url}/post`,
       data: {
         userId: 1,
         isPrivate: isPrivate,

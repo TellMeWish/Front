@@ -1,6 +1,7 @@
 import "../css/createPost.css";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { url } from "../Url";
 import axios from "axios";
 function UpdatePost() {
   let navigate = useNavigate();
@@ -13,20 +14,25 @@ function UpdatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   useEffect(() => {
-    axios.get(`http://13.209.145.95:8081/post/${id}`).then((res) => {
+    axios.get(`${url}/post/${id}`).then((res) => {
       const post = res.data.post;
       document.getElementById("content").value = post.content;
+      setContent(post.content);
       document.getElementById("title").value = post.title;
+      setTitle(post.title);
       document.getElementById("category").value = post.category;
+      setCategory(post.category);
       document.getElementById("isPrivate").checked = post.isPrivate;
+      setIsPrivate(post.isprivate);
       document.getElementById("isParticipate").checked = post.isParticipate;
+      setIsParticipate(post.isParticipate);
     });
   }, []);
   const submitPost = async (event) => {
     event.preventDefault();
     const config = {
-      method: "update",
-      url: `http://13.209.145.95:8081/post/${id}`,
+      method: "put",
+      url: `${url}/post/${id}`,
       data: {
         userId: 1,
         isPrivate: isPrivate,

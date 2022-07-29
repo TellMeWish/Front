@@ -1,11 +1,10 @@
-/*const { createProxyMiddleware } = require("http-proxy-middleware");
+import { createProxyMiddleware } from "http-proxy-middleware";
 
-module.exports = function (app) {
+export default function (app) {
   app.use(
     createProxyMiddleware("/api", {
       target: "http://3.39.212.63:8081",
       changeOrigin: true,
     })
   );
-};
-*/
+}

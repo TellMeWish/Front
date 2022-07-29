@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import axios from "axios";
+import { url } from "../Url";
 import "../css/PostList.css";
 import { useNavigate } from "react-router-dom";
 let Post = styled.div`
@@ -68,7 +69,7 @@ function PostList() {
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`http://13.209.145.95:8081/post/postList?page=${page}&size=6`)
+      .get(`${url}/post/postList?page=${page}&size=6`)
       .then((res) => {
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.content]);

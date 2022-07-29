@@ -2,6 +2,7 @@ import "../css/Signup.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { url } from "../Url";
 function Signup() {
   const navigate = useNavigate();
   const [id, setId] = useState();
@@ -14,15 +15,19 @@ function Signup() {
       password: pw,
       nickname: nick,
     };
-
-    await axios
-      .get(`http://3.39.212.63:8081/api/hello`)
+    const config = {
+      method: "post",
+      url: `${url}/api/signup`,
+      data: data,
+    };
+    await axios(config)
       .then((res) => {
         console.log(res);
         alert("등록 완료");
         navigate("/login");
       })
       .catch((err) => {
+        console.log(id, pw, nick);
         alert("실패");
         console.log(err);
       });
