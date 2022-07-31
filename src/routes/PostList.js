@@ -71,9 +71,10 @@ function PostList() {
     await axios
       .get(`${url}/post/postList?page=${page}&size=6`)
       .then((res) => {
+        console.log(res);
         if (items) {
-          setItems((prevState) => [...prevState, ...res.data.content]);
-        } else setItems((prevState) => [...prevState, ...res.data.content]);
+          setItems((prevState) => [...prevState, ...res.data.postList]);
+        } else setItems((prevState) => [...prevState, ...res.data.postList]);
       })
       .catch(() => {
         console.log("실패함");
@@ -114,7 +115,7 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
+                <img src="/img/noimage.png"></img>
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>
@@ -134,7 +135,7 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                <img src={item.files[0] ? item.files[0] : process.env.PUBLIC_URL + "/img/noimage.png"}></img>
+                <img src="/img/noimage.png"></img>
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>

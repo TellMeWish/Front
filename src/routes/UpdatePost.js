@@ -26,6 +26,7 @@ function UpdatePost() {
       setIsPrivate(post.isprivate);
       document.getElementById("isParticipate").checked = post.isParticipate;
       setIsParticipate(post.isParticipate);
+      console.log(post);
     });
   }, []);
   const submitPost = async (event) => {
@@ -45,7 +46,7 @@ function UpdatePost() {
     await axios(config)
       .then((res) => {
         console.log(res);
-        alert("등록 완료");
+        alert("수정 완료");
         navigate("/postList");
       })
       .catch(() => {
@@ -72,7 +73,7 @@ function UpdatePost() {
             <div>
               참여 여부{" "}
               <input
-                id="isPrivate"
+                id="isParticipate"
                 type="checkbox"
                 name="isParticipate"
                 onChange={(e) => {
@@ -84,7 +85,7 @@ function UpdatePost() {
           <div className="category">
             <select
               id="category"
-              onChange={(e) => {
+              onChange={async (e) => {
                 setCategory(e.target.value);
               }}
             >
