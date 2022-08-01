@@ -54,8 +54,8 @@ function Detail() {
   const [post, setPost] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  const [content, setContent] = useState("");
-
+  const [update, setUpdate] = useState("");
+  const [reply, setReply] = useState("");
   const getItem = () => {
     axios.get(`${url}/post/${id}`).then((res) => {
       setPost(res.data.post);
@@ -87,6 +87,19 @@ function Detail() {
     });
   };
 
+  const postReply = (pid) => {
+    const data = {
+      content: reply,
+      userId: 1,
+      postId: id,
+      secret: true,
+      parentId: pid,
+    };
+    axios.post(`${url}/comment`, data).then((res) => {
+      console.log(res);
+      getItem();
+    });
+  };
   const showInput = (i) => {
     document.getElementById(i).style.display = "inline-block";
     document.getElementById(`reply${i}`).innerText = "닫기";
@@ -105,15 +118,29 @@ function Detail() {
     document.getElementById(`replyInput${i}`).style.display = "none";
     document.getElementById(`update${i}`).innerText = "수정";
   };
-  const replyContent = (id, i) => {
+  const showUpdateReply = (i) => {
+    document.getElementById(`replyContent${i}`).style.display = "none";
+    document.getElementById(`updateReplyInput${i}`).style.display = "inline-block";
+    document.getElementById(`updateReply${i}`).innerText = "닫기";
+  };
+  const closeUpdateReply = (i) => {
+    document.getElementById(`replyContent${i}`).style.display = "inline-block";
+    document.getElementById(`updateReplyInput${i}`).style.display = "none";
+    document.getElementById(`updateReply${i}`).innerText = "수정";
+  };
+  const updateComment = (id) => {
     const data = {
-      content: content,
+      content: update,
       secret: true,
     };
-    axios.put(`${url}/comment/${id}`, data).then(() => {
-      getItem();
-      closeReply(i);
-    });
+    axios
+      .put(`${url}/comment/${id}`, data)
+      .then(() => {
+        getItem();
+      })
+      .catch(() => {
+        console.log("답글실패");
+      });
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "100px" }}>
@@ -174,7 +201,7 @@ function Detail() {
                       id={"replyInput" + i}
                       style={{ display: "none" }}
                       onChange={(e) => {
-                        setContent(e.target.value);
+                        setUpdate(e.target.value);
                       }}
                     ></input>
                     <div
@@ -185,7 +212,14 @@ function Detail() {
                     >
                       답글달기
                     </div>
-
+                    <div
+                      onClick={() => {
+                        postReply(comment.id);
+                        closeInput(i);
+                      }}
+                    >
+                      답글달기버튼
+                    </div>
                     <div
                       id={"update" + i}
                       onClick={(e) => {
@@ -197,7 +231,8 @@ function Detail() {
                     <div
                       id={"updateButton" + i}
                       onClick={() => {
-                        replyContent(comment.id, i);
+                        updateComment(comment.id, i);
+                        closeReply(i);
                       }}
                     >
                       수정버튼
@@ -212,9 +247,53 @@ function Detail() {
                       삭제
                     </div>
                   </div>
-                  <input id={i} style={{ display: "none" }}></input>
-                  {comment.commentList.map((com) => {
-                    return <div style={{ width: "600px", background: "#Fff" }}>{com.content}</div>;
+                  <input
+                    id={i}
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      setReply(e.target.value);
+                    }}
+                  ></input>
+                  {comment.commentList.map((com, i) => {
+                    return (
+                      <div style={{ display: "flex", justifyContent: "space-between", width: "600px", background: "#Fff" }}>
+                        <div id={`replyContent${i}`}>{com.content}</div>
+                        <div>
+                          <input
+                            id={`updateReplyInput${i}`}
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                              setUpdate(e.target.value);
+                            }}
+                          ></input>
+                          <div
+                            id={`updateReply${i}`}
+                            onClick={(e) => {
+                              e.target.innerText == "수정" ? showUpdateReply(i) : closeUpdateReply(i);
+                            }}
+                          >
+                            수정
+                          </div>
+                          <div
+                            onClick={() => {
+                              updateComment(com.id, i);
+                              closeUpdateReply(i);
+                            }}
+                          >
+                            수정버튼
+                          </div>
+                          <div
+                            onClick={() => {
+                              axios.delete(`${url}/comment/${com.id}`).then(() => {
+                                getItem();
+                              });
+                            }}
+                          >
+                            삭제
+                          </div>
+                        </div>
+                      </div>
+                    );
                   })}
                 </div>
               </div>
