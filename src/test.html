@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ou6h7z97rn&submodules=geocoder"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+  </head>
+
+  <body>
+    <div class="search">
+      <input id="address" type="text" placeholder="검색할 주소" />
+      <input id="submit" type="button" value="정제주소검색" />
+      <div>대충 입력해도 정제해서 주소검색.</div>
+    </div>
+
+    <div id="map" style="width: 1000px; height: 500px"></div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>도로명</th>
+            <th>지번</th>
+            <th>건물명</th>
+            <th>위도</th>
+            <th>경도</th>
+            <th>우편번호</th>
+          </tr>
+        </thead>
+        <tbody id="mapList"></tbody>
+      </table>
+    </div>
+  </body>
+  <script></script>
+</html>

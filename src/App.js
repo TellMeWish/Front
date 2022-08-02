@@ -8,6 +8,7 @@ import PostList from "./routes/PostList";
 import Detail from "./routes/Detail";
 import UpdatePost from "./routes/UpdatePost";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./css/App.css";
 
 function App() {
@@ -49,22 +50,35 @@ function App() {
               </Nav.Link>
               <Nav.Link>지도로 검색</Nav.Link>
             </Nav>
-            <Nav>
-              <Nav.Link
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                로그인
-              </Nav.Link>
-              <Nav.Link
-                onClick={() => {
-                  navigate("/signUp");
-                }}
-              >
-                회원가입
-              </Nav.Link>
-            </Nav>
+            {!localStorage.getItem("token") ? (
+              <Nav>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/signUp");
+                  }}
+                >
+                  회원가입
+                </Nav.Link>
+              </Nav>
+            ) : (
+              <Nav>
+                <Nav.Link
+                  onClick={() => {
+                    localStorage.clear();
+                    window.location.reload();
+                  }}
+                >
+                  로그아웃
+                </Nav.Link>
+              </Nav>
+            )}
           </Navbar.Collapse>
         </Container>
       </Navbar>

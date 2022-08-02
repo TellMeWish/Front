@@ -17,7 +17,7 @@ function Signup() {
     };
     const config = {
       method: "post",
-      url: `${url}/api/signup`,
+      url: `${url}/api/signup/`,
       data: data,
     };
     await axios(config)

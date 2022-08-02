@@ -46,7 +46,22 @@ let Button = styled.button`
   margin-top: 10px;
   height: 30px;
 `;
-let Comments = styled.div``;
+let Comment = styled.div`
+  width: 1000px;
+  height: 150px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid black;
+  border-radius: 15px;
+  display: flex;
+  margin-top: 50px;
+  & .btns {
+    display: flex;
+    font-size: 12px;
+    width: 150px;
+    justify-content: space-between;
+  }
+`;
 function Detail() {
   const navigate = useNavigate();
 
@@ -56,6 +71,7 @@ function Detail() {
   const [comments, setComments] = useState([]);
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
+
   const getItem = () => {
     axios.get(`${url}/post/${id}`).then((res) => {
       setPost(res.data.post);
@@ -102,31 +118,45 @@ function Detail() {
   };
   const showInput = (i) => {
     document.getElementById(i).style.display = "inline-block";
+    document.getElementById(`postReply${i}`).style.display = "inline-block";
     document.getElementById(`reply${i}`).innerText = "닫기";
   };
   const closeInput = (i) => {
     document.getElementById(i).style.display = "none";
+    document.getElementById(`postReply${i}`).style.display = "none";
     document.getElementById(`reply${i}`).innerText = "답글달기";
   };
-  const showReply = (i) => {
+  const showUpdate = (i) => {
     document.getElementById(`content${i}`).style.display = "none";
     document.getElementById(`replyInput${i}`).style.display = "inline-block";
+    document.getElementById(`updateButton${i}`).style.display = "inline-block";
     document.getElementById(`update${i}`).innerText = "닫기";
   };
-  const closeReply = (i) => {
+  const closeUpdate = (i) => {
     document.getElementById(`content${i}`).style.display = "inline-block";
     document.getElementById(`replyInput${i}`).style.display = "none";
+    document.getElementById(`updateButton${i}`).style.display = "none";
     document.getElementById(`update${i}`).innerText = "수정";
   };
   const showUpdateReply = (i) => {
     document.getElementById(`replyContent${i}`).style.display = "none";
     document.getElementById(`updateReplyInput${i}`).style.display = "inline-block";
+    document.getElementById(`putReply${i}`).style.display = "inline-block";
     document.getElementById(`updateReply${i}`).innerText = "닫기";
   };
   const closeUpdateReply = (i) => {
     document.getElementById(`replyContent${i}`).style.display = "inline-block";
     document.getElementById(`updateReplyInput${i}`).style.display = "none";
+    document.getElementById(`putReply${i}`).style.display = "none";
     document.getElementById(`updateReply${i}`).innerText = "수정";
+  };
+  const showReply = (i) => {
+    document.getElementById(`replyComment${i}`).style.display = "inline-block";
+    document.getElementById(`showReply${i}`).innerText = "답글닫기";
+  };
+  const closeReply = (i) => {
+    document.getElementById(`replyComment${i}`).style.display = "none";
+    document.getElementById(`showReply${i}`).innerText = "답글보기";
   };
   const updateComment = (id) => {
     const data = {
@@ -193,109 +223,139 @@ function Detail() {
         {comments?.map((comment, i) => {
           if (comment.commentList) {
             return (
-              <div style={{ display: "flex" }}>
-                <div style={{ width: "800px", background: "var(--color-light-green)" }}>
-                  <div style={{ display: "flex" }}>
-                    <div id={"content" + i}>{comment.content}</div>
-                    <input
-                      id={"replyInput" + i}
-                      style={{ display: "none" }}
-                      onChange={(e) => {
-                        setUpdate(e.target.value);
-                      }}
-                    ></input>
-                    <div
-                      id={"reply" + i}
-                      onClick={(e) => {
-                        e.target.innerText == "답글달기" ? showInput(i) : closeInput(i);
-                      }}
-                    >
-                      답글달기
-                    </div>
-                    <div
-                      onClick={() => {
-                        postReply(comment.id);
-                        closeInput(i);
-                      }}
-                    >
-                      답글달기버튼
-                    </div>
-                    <div
-                      id={"update" + i}
-                      onClick={(e) => {
-                        e.target.innerText == "수정" ? showReply(i) : closeReply(i);
-                      }}
-                    >
-                      수정
-                    </div>
-                    <div
-                      id={"updateButton" + i}
-                      onClick={() => {
-                        updateComment(comment.id, i);
-                        closeReply(i);
-                      }}
-                    >
-                      수정버튼
-                    </div>
-                    <div
-                      onClick={() => {
-                        axios.delete(`${url}/comment/${comment.id}`).then(() => {
-                          getItem();
-                        });
-                      }}
-                    >
-                      삭제
-                    </div>
-                  </div>
-                  <input
-                    id={i}
-                    style={{ display: "none" }}
-                    onChange={(e) => {
-                      setReply(e.target.value);
-                    }}
-                  ></input>
-                  {comment.commentList.map((com, i) => {
-                    return (
-                      <div style={{ display: "flex", justifyContent: "space-between", width: "600px", background: "#Fff" }}>
-                        <div id={`replyContent${i}`}>{com.content}</div>
-                        <div>
-                          <input
-                            id={`updateReplyInput${i}`}
-                            style={{ display: "none" }}
-                            onChange={(e) => {
-                              setUpdate(e.target.value);
-                            }}
-                          ></input>
-                          <div
-                            id={`updateReply${i}`}
-                            onClick={(e) => {
-                              e.target.innerText == "수정" ? showUpdateReply(i) : closeUpdateReply(i);
-                            }}
-                          >
-                            수정
-                          </div>
-                          <div
-                            onClick={() => {
-                              updateComment(com.id, i);
-                              closeUpdateReply(i);
-                            }}
-                          >
-                            수정버튼
-                          </div>
-                          <div
-                            onClick={() => {
-                              axios.delete(`${url}/comment/${com.id}`).then(() => {
-                                getItem();
-                              });
-                            }}
-                          >
-                            삭제
-                          </div>
+              <div>
+                <Comment>
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", width: "900px", marginBottom: "30px" }}>
+                      <div style={{ fontSize: "20px" }}>닉네임</div>
+                      <div class="btns">
+                        <div
+                          id={`showReply${i}`}
+                          onClick={(e) => {
+                            comment.commentList[0]
+                              ? e.target.innerText == "답글보기"
+                                ? showReply(i)
+                                : closeReply(i)
+                              : e.target.innerText == "답글보기"
+                              ? (document.getElementById(`showReply${i}`).innerText = "답글닫기")
+                              : (document.getElementById(`showReply${i}`).innerText = "답글보기");
+                          }}
+                        >
+                          답글보기
+                        </div>
+                        <div
+                          id={"reply" + i}
+                          onClick={(e) => {
+                            e.target.innerText == "답글달기" ? showInput(i) : closeInput(i);
+                          }}
+                        >
+                          답글달기
+                        </div>
+                        <div
+                          id={`postReply${i}`}
+                          style={{ display: "none" }}
+                          onClick={() => {
+                            postReply(comment.id);
+                            closeInput(i);
+                          }}
+                        >
+                          답글달기버튼
+                        </div>
+                        <div
+                          id={"update" + i}
+                          onClick={(e) => {
+                            e.target.innerText == "수정" ? showUpdate(i) : closeUpdate(i);
+                            document.getElementById(`replyInput${i}`).value = comment.content;
+                          }}
+                        >
+                          수정
+                        </div>
+                        <div
+                          onClick={() => {
+                            axios.delete(`${url}/comment/${comment.id}`).then(() => {
+                              getItem();
+                            });
+                          }}
+                        >
+                          삭제
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <div id={"content" + i}>{comment.content}</div>
+                      <div>{comment.createAt}</div>
+                      <input
+                        id={"replyInput" + i}
+                        style={{ display: "none", width: "200px" }}
+                        onChange={(e) => {
+                          setUpdate(e.target.value);
+                        }}
+                      ></input>
+                      <div
+                        id={"updateButton" + i}
+                        style={{ display: "none", marginLeft: "20px" }}
+                        onClick={() => {
+                          updateComment(comment.id, i);
+                          closeUpdate(i);
+                        }}
+                      >
+                        수정하기
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <input
+                      id={i}
+                      style={{ display: "none", width: "200px" }}
+                      onChange={(e) => {
+                        setReply(e.target.value);
+                      }}
+                    ></input>
+                  </div>
+                </Comment>
+                {comment.commentList.map((com, i) => {
+                  return (
+                    <Comment id={`replyComment${i}`} style={{ display: "none", justifyContent: "space-between", width: "500px", height: "200px", background: "#Fff" }}>
+                      <div id={`replyContent${i}`}>{com.content}</div>
+                      <div>
+                        <input
+                          id={`updateReplyInput${i}`}
+                          style={{ display: "none" }}
+                          onChange={(e) => {
+                            setUpdate(e.target.value);
+                          }}
+                        ></input>
+                        <div
+                          id={`updateReply${i}`}
+                          onClick={(e) => {
+                            e.target.innerText == "수정" ? showUpdateReply(i) : closeUpdateReply(i);
+                          }}
+                        >
+                          수정
+                        </div>
+                        <div
+                          id={`putReply${i}`}
+                          style={{ display: "none" }}
+                          onClick={() => {
+                            updateComment(com.id, i);
+                            closeUpdateReply(i);
+                          }}
+                        >
+                          수정버튼
+                        </div>
+                        <div
+                          onClick={() => {
+                            axios.delete(`${url}/comment/${com.id}`).then(() => {
+                              getItem();
+                            });
+                          }}
+                        >
+                          삭제
+                        </div>
+                      </div>
+                    </Comment>
+                  );
+                })}
               </div>
             );
           }
