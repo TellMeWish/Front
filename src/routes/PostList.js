@@ -69,7 +69,7 @@ function PostList() {
   const getItems = useCallback(async () => {
     setLoading(true);
     await axios
-      .get(`${url}/post/postList?page=${page}&size=6`)
+      .get(`${url}/post/postList?page=${page}&size=9`)
       .then((res) => {
         console.log(res);
         if (items) {
