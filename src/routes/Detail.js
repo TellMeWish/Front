@@ -147,6 +147,16 @@ function Detail() {
     document.getElementById(`putReply${i}`).style.display = "none";
     document.getElementById(`updateReply${i}`).innerText = "수정";
   };
+  const showReply = (i) => {
+    document.getElementById(`replyComment${i}`).style.display = "inline-block";
+    document.getElementById(`reply${i}`).style.display = "inline-block";
+    document.getElementById(`showReply${i}`).innerText = "답글닫기";
+  };
+  const closeReply = (i) => {
+    document.getElementById(`replyComment${i}`).style.display = "none";
+    document.getElementById(`reply${i}`).style.display = "none";
+    document.getElementById(`showReply${i}`).innerText = "답글보기";
+  };
   const updateComment = (id) => {
     const data = {
       content: update,
@@ -263,8 +273,23 @@ function Detail() {
                       </div>
                       <div>
                         <div id={"content" + i}>{comment.content}</div>
-                        <div style={{ marginTop: "50px" }}>
+                        <div style={{ marginTop: "20px" }}>
                           <span
+                            id={`showReply${i}`}
+                            onClick={(e) => {
+                              comment.commentList[0]
+                                ? e.target.innerText == "답글보기"
+                                  ? showReply(i)
+                                  : closeReply(i)
+                                : e.target.innerText == "답글보기"
+                                ? (document.getElementById(`showReply${i}`).innerText = "답글닫기")
+                                : (document.getElementById(`showReply${i}`).innerText = "답글보기");
+                            }}
+                          >
+                            답글보기
+                          </span>
+                          <span
+                            style={{ display: "none", marginLeft: "30px" }}
                             id={"reply" + i}
                             onClick={(e) => {
                               e.target.innerText == "답글달기" ? showInput(i) : closeInput(i);
@@ -295,15 +320,11 @@ function Detail() {
                   </div>
                   <div></div>
                 </Comment>
-                <div style={{ width: "1000px", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                <div style={{ display: "none" }} id={`replyComment${i}`}>
                   {comment.commentList.map((com, index) => {
                     return (
-                      <Comment
-                        id={`replyComment${i}`}
-                        style={{ position: "relative", display: "inline-block", justifyContent: "space-between", width: "900px", marginLeft: "20px", marginBottom: "30px" }}
-                      >
-                        <img style={{ position: "absolute", left: "-60px", bottom: "50px" }} className="icon" src={process.env.PUBLIC_URL + "/img/turn-down.png"} />
-                        <div>
+                      <div style={{ width: "1000px", background: "#F8F9FA" }}>
+                        <Comment style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "960px", marginLeft: "20px", marginBottom: "20px", background: "#F8F9FA" }}>
                           <div style={{ fontSize: "20px", display: "flex", justifyContent: "space-between" }}>
                             닉네임
                             <div className="btns">
@@ -348,8 +369,8 @@ function Detail() {
                               }}
                             ></input>
                           </div>
-                        </div>
-                      </Comment>
+                        </Comment>
+                      </div>
                     );
                   })}
                 </div>
