@@ -90,10 +90,13 @@ function UpdatePost() {
               }}
             >
               <option value="">===선택===</option>
-              <option value="여행1">여행1</option>
-              <option value="여행2">여행2</option>
-              <option value="여행3">여행3</option>
-              <option value="여행4">여행4</option>
+              <option value="여행">여행</option>
+              <option value="운동">운동</option>
+              <option value="공부">공부</option>
+              <option value="음식">음식</option>
+              <option value="취미">취미</option>
+              <option value="갖고싶은것">갖고싶은것</option>
+              <option value="기타">기타</option>
             </select>
           </div>
         </div>

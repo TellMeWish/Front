@@ -6,6 +6,7 @@ import Signup from "./routes/Signup";
 import CreatePost from "./routes/CreatePost";
 import PostList from "./routes/PostList";
 import Detail from "./routes/Detail";
+import Profile from "./routes/Profile";
 import UpdatePost from "./routes/UpdatePost";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -36,9 +37,13 @@ function App() {
                 버킷리스트 목록
               </Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">여행하기</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">이것</NavDropdown.Item>
-                <NavDropdown.Item href="#action5">저것</NavDropdown.Item>
+                <NavDropdown.Item href="#action3">여행</NavDropdown.Item>
+                <NavDropdown.Item href="#action4">운동</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">공부</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">음식</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">취미</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">갖고싶은것</NavDropdown.Item>
+                <NavDropdown.Item href="#action5">기타</NavDropdown.Item>
               </NavDropdown>
 
               <Nav.Link
@@ -71,7 +76,15 @@ function App() {
               <Nav>
                 <Nav.Link
                   onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  프로필
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => {
                     localStorage.clear();
+                    navigate("/");
                     window.location.reload();
                   }}
                 >
@@ -90,6 +103,7 @@ function App() {
         <Route path="/createPost" element={<CreatePost />} />
         <Route path="/updatePost/:id" element={<UpdatePost />} />
         <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

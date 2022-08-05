@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 let Card = styled.div`
-  height: 600px;
+  height: 100vh;
   background: ${(props) => props.bg};
   display: flex;
   align-items: center;
