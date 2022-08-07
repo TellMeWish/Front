@@ -29,7 +29,7 @@ function Map() {
   return (
     <div>
       {apiReady && googlemaps && <Searchbar map={map} mapApi={googlemaps} addPlace={addPlace} />}
-      <div style={{ height: "400px" }} className="googleMap">
+      <div style={{ width: "600px", height: "400px" }} className="googleMap">
         <GoogleMap
           bootstrapURLKeys={{ key: key, libraries: "places" }}
           defaultZoom={0}

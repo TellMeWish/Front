@@ -1,4 +1,4 @@
-.createForm {
+#createForm {
   width: 800px;
   background: var(--color-skin);
   padding: 50px;
@@ -40,4 +40,5 @@ textarea,
 .buttonBox {
   display: flex;
   justify-content: space-between;
+  margin-top: 50px;
 }

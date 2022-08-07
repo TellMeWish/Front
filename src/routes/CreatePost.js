@@ -19,6 +19,7 @@ function CreatePost() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [showMap, setShowMap] = useState(0);
 
   const submitPost = async (event) => {
     event.preventDefault();
@@ -46,7 +47,7 @@ function CreatePost() {
   };
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
-      <form className="createForm" onSubmit={submitPost}>
+      <form id="createForm" onSubmit={submitPost}>
         <div className="checkList">
           <div className="checkList">
             <div style={{ marginRight: "20px" }}>
@@ -108,10 +109,28 @@ function CreatePost() {
             }}
           ></textarea>
         </div>
-        <Map />
+        {showMap ? (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>장소 </div>
+            <Map />
+          </div>
+        ) : null}
         <div className="buttonBox">
-          <Button type="submit">등록하기</Button>
-          <Button>초기화하기</Button>
+          <Button
+            type="button"
+            onClick={(e) => {
+              if (e.target.innerText == "위치정보 추가") {
+                setShowMap(1);
+                e.target.innerText = "위치정보 제거";
+              } else {
+                setShowMap(0);
+                e.target.innerText = "위치정보 추가";
+              }
+            }}
+          >
+            위치정보 추가
+          </Button>
+          <Button>등록하기</Button>
         </div>
       </form>
     </div>

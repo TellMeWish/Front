@@ -1,7 +1,7 @@
 import React from "react";
 class SearchBox extends React.Component {
   render() {
-    return <input id="pac-input" className="controls" type="text" placeholder="Search Box" ref={(ref) => (this.input = ref)} />;
+    return <input style={{ width: "600px", marginBottom: "20px" }} id="pac-input" className="controls" type="text" placeholder="장소 검색" ref={(ref) => (this.input = ref)} />;
   }
   onPlacesChanged = ({ map, mapApi, addPlace } = this.props) => {
     const selected = this.searchBox.getPlaces();
@@ -13,7 +13,7 @@ class SearchBox extends React.Component {
       map.fitBounds(place.geometry.viewport);
     } else {
       map.setCenter(place.geometry.locatio);
-      map.setZoom(15);
+      map.setZoom(12);
     }
     console.log(selected);
     addPlace(selected);

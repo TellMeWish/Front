@@ -43,7 +43,12 @@ function Profile() {
   }, [list]);
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <ProfileCard>ooo의 프로필</ProfileCard>
+      <ProfileCard>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div>ooo의 프로필</div>
+          <div style={{ fontSize: "10px", marginLeft: "10px" }}>프로필 수정</div>
+        </div>
+      </ProfileCard>
       <div style={{ marginTop: "30px" }}>
         <ListBtn
           className="disabled"
