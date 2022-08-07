@@ -63,13 +63,6 @@ function Signup() {
             type="text"
           ></input>
         </div>
-        <div className="inputBox phoneNumBox">
-          <div>휴대폰번호</div>
-          <div style={{ width: "400px" }}>
-            <input style={{ width: "280px" }} type="text"></input>
-            <button>인증</button>
-          </div>
-        </div>
         <button type="submit" className="submit-btn">
           회원가입
         </button>

@@ -1,13 +1,10 @@
 import "../css/createPost.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GoogleMap from "google-map-react";
-import Marker from "../Components/Marker";
 import styled from "styled-components";
 import axios from "axios";
 import { url } from "../Url";
-import Searchbar from "../Components/Searchbar";
-import { key } from "../Key";
+import Map from "../Components/Map";
 let Button = styled.button`
   border: none;
   background: var(--color-light-green);
@@ -21,27 +18,8 @@ function CreatePost() {
   const [isParticipate, setIsParticipate] = useState(0);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
-  const [apiReady, setApiReady] = useState(false);
-  const [map, setMap] = useState(null);
-  const [googlemaps, setGooglemaps] = useState(null);
-  const [center, setCenter] = useState({ lat: 37.5, lng: 127 });
   const [content, setContent] = useState("");
-  const [position, setPosition] = useState({});
-  const [places, setPlaces] = useState([]);
-  const [target, setTarget] = useState(null);
 
-  const addPlace = (places) => {
-    if (places) {
-      setPlaces(places);
-    }
-  };
-  const handleApiLoaded = (map, maps) => {
-    if (map && maps) {
-      setApiReady(true);
-      setMap(map);
-      setGooglemaps(maps);
-    }
-  };
   const submitPost = async (event) => {
     event.preventDefault();
     const config = {
@@ -66,9 +44,6 @@ function CreatePost() {
         alert("실패");
       });
   };
-  useEffect(() => {
-    if (places[0]) setPosition({ lng: places[0].geometry.location.lng(), lat: places[0].geometry.location.lat() });
-  }, [places]);
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
       <form className="createForm" onSubmit={submitPost}>
@@ -133,24 +108,7 @@ function CreatePost() {
             }}
           ></textarea>
         </div>
-        <div>
-          {apiReady && googlemaps && <Searchbar map={map} mapApi={googlemaps} addPlace={addPlace} />}
-          <div style={{ height: "400px" }} className="googleMap">
-            <GoogleMap
-              bootstrapURLKeys={{ key: key, libraries: "places" }}
-              defaultZoom={0}
-              defaultCenter={center}
-              yesIWantToUseGoogleMapApiInternals
-              onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-              onChildClick={markerClicked}
-            >
-              {places.length !== 0 &&
-                places.map((place) => {
-                  return <Marker key={place.id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
-                })}
-            </GoogleMap>
-          </div>
-        </div>
+        <Map />
         <div className="buttonBox">
           <Button type="submit">등록하기</Button>
           <Button>초기화하기</Button>
