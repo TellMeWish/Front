@@ -21,13 +21,13 @@
   padding: 10px 0;
   font-size: 13px;
 }
-@media (min-width: 768px) {
+@media (min-width: 920px) {
   .postList {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1300px) {
   .postList {
     grid-template-columns: 1fr 1fr 1fr;
   }

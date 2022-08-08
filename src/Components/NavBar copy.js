@@ -10,6 +10,7 @@ let Category = styled.div`
   height: 30px;
   display: flex;
   align-items: center;
+  cursor: pointer;
   &:hover {
     font-size: 15px;
   }
@@ -29,7 +30,7 @@ function NavBar() {
       </Menu>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>
-          <div style={{ marginTop: "33px" }}>
+          <div className="searchBox" style={{ marginTop: "33px" }}>
             <input style={{ width: "500px", height: "40px", marginLeft: "20px", marginBottom: "20px" }}></input>
             <button style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}>검색</button>
           </div>
@@ -43,8 +44,14 @@ function NavBar() {
             </Menu>
             <div style={{ position: "relative" }}>
               <Menu
-                onClick={() => {
-                  category ? setCategory(0) : setCategory(1);
+                onClick={(e) => {
+                  if (category) {
+                    e.target.style.borderBottom = "none";
+                    setCategory(0);
+                  } else {
+                    e.target.style.borderBottom = "1px solid black";
+                    setCategory(1);
+                  }
                 }}
               >
                 카테고리 v
@@ -84,7 +91,7 @@ function NavBar() {
           </div>
         </div>
         {!localStorage.getItem("token") ? (
-          <div style={{ display: "flex", position: "absolute", right: "20px" }}>
+          <div className="userBox">
             <Menu
               onClick={() => {
                 navigate("/login");
@@ -101,7 +108,7 @@ function NavBar() {
             </Menu>
           </div>
         ) : (
-          <div style={{ display: "flex", position: "absolute", right: "20px" }}>
+          <div className="userBox">
             <Menu
               onClick={() => {
                 navigate("/profile");

@@ -16,7 +16,7 @@
   --color-green: #94b49f;
 }
 body {
-  margin-top: 100px;
+  margin-top: 150px;
 }
 .nav_bar {
   width: 100vw;
@@ -29,4 +29,23 @@ body {
   display: flex;
   align-items: center;
   padding: 20px;
+}
+.userBox {
+  display: flex;
+  position: absolute;
+  right: 20px;
+}
+@media screen and (max-width: 1140px) {
+  .userBox {
+    display: none;
+  }
+}
+
+.searchBox {
+  margin-top: 33px;
+}
+@media screen and (max-width: 990px) {
+  .searchBox {
+    display: none;
+  }
 }
