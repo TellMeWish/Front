@@ -31,7 +31,7 @@ function NavBar() {
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>
           <div className="searchBox" style={{ marginTop: "33px" }}>
-            <input style={{ width: "500px", height: "40px", marginLeft: "20px", marginBottom: "20px" }}></input>
+            <input style={{ width: "500px", height: "40px", marginLeft: "20px", marginBottom: "20px", paddingLeft: "10px" }} placeholder="ooo 여행"></input>
             <button style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}>검색</button>
           </div>
           <div style={{ display: "flex", fontSize: "13px" }}>

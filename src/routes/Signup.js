@@ -10,15 +10,18 @@ function Signup() {
   const [nick, setNick] = useState();
   const signUp = async (event) => {
     event.preventDefault();
-    const data = {
+    const data = JSON.stringify({
       username: id,
       password: pw,
       nickname: nick,
-    };
-    const config = {
+    });
+    var config = {
       method: "post",
-      url: `${url}/api/signup/`,
+      url: `${url}/api/signup`,
       data: data,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
     await axios(config)
       .then((res) => {

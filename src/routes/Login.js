@@ -10,14 +10,17 @@ function Login() {
 
   const doLogin = (e) => {
     e.preventDefault();
-    const user = {
+    const user = JSON.stringify({
       username: id,
       password: pw,
-    };
+    });
     const config = {
       method: "post",
-      url: `${url}/api/authenticate/`,
+      url: `${url}/api/authenticate`,
       data: user,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
     axios(config)
       .then((res) => {

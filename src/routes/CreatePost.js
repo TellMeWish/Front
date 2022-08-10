@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { url } from "../Url";
+import GoogleMap from "google-map-react";
+import Marker from "../Components/Marker";
+import Searchbar from "../Components/Searchbar";
+import { key } from "../Key";
+import Carousel from "react-bootstrap/Carousel";
 import Map from "../Components/Map";
 let Button = styled.button`
   border: none;
@@ -14,36 +19,88 @@ let Button = styled.button`
 function CreatePost() {
   let navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
   const [isPrivate, setIsPrivate] = useState(0);
   const [isParticipate, setIsParticipate] = useState(0);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [showMap, setShowMap] = useState(0);
-
+  const [files, setFiles] = useState([]);
+  const [location, setLocation] = useState({});
+  const [position, setPosition] = useState({});
+  const [places, setPlaces] = useState([]);
+  const [target, setTarget] = useState(0);
+  const [apiReady, setApiReady] = useState(false);
+  const [map, setMap] = useState(null);
+  const [googlemaps, setGooglemaps] = useState(null);
+  const [center, setCenter] = useState({ lat: 37.5, lng: 127 });
+  const addPlace = (places) => {
+    if (places) {
+      setPlaces(places);
+    }
+  };
+  const handleApiLoaded = (map, maps) => {
+    if (map && maps) {
+      setApiReady(true);
+      setMap(map);
+      setGooglemaps(maps);
+    }
+  };
+  const mouseOver = (key) => {
+    setTarget(key);
+  };
+  const mouseOut = (key) => {
+    setTarget(0);
+  };
+  useEffect(() => {
+    if (places[0]) setPosition({ longitude: places[0].geometry.location.lng(), latitude: places[0].geometry.location.lat() });
+  }, [places]);
   const submitPost = async (event) => {
     event.preventDefault();
     const config = {
       method: "post",
       url: `${url}/post`,
       data: {
-        userId: 1,
         isPrivate: isPrivate,
         isParticipate: isParticipate,
         category: category,
         title: title,
         content: content,
+        files: files,
+        location: position,
+      },
+      Headers: {
+        Authorization: "Bearer " + token,
       },
     };
+
     await axios(config)
       .then((res) => {
-        console.log(res);
+        console.log(files);
         alert("등록 완료");
         navigate("/postList");
       })
-      .catch(() => {
+      .catch((err) => {
         alert("실패");
+        console.log(err);
       });
+  };
+
+  const addFiles = (e) => {
+    const imageLists = e.target.files;
+    let imageUrlLists = [...files];
+
+    for (let i = 0; i < imageLists.length; i++) {
+      const currentImageUrl = URL.createObjectURL(imageLists[i]);
+      imageUrlLists.push(currentImageUrl);
+    }
+
+    setFiles(imageUrlLists);
+  };
+  const deleteFile = (id) => {
+    setFiles(files.filter((_, index) => index !== id));
+    console.log("delete");
   };
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
@@ -109,10 +166,57 @@ function CreatePost() {
             }}
           ></textarea>
         </div>
+        <div className="formBox">
+          <div>사진</div>
+          <input type="file" multiple onChange={addFiles}></input>
+        </div>
+        {files[0] ? (
+          <Carousel variant="dark">
+            {files.map((img, i) => {
+              if (img)
+                return (
+                  <Carousel.Item>
+                    <Carousel.Caption style={{}}>
+                      <button
+                        style={{ position: "relative", border: "1px solid black", background: "white" }}
+                        type="button"
+                        onClick={() => {
+                          deleteFile(i);
+                        }}
+                      >
+                        사진 삭제
+                      </button>
+                    </Carousel.Caption>
+                    <img className="d-block w-100" src={img} />
+                  </Carousel.Item>
+                );
+            })}
+          </Carousel>
+        ) : null}
         {showMap ? (
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>장소 </div>
-            <Map />
+            <div>
+              {apiReady && googlemaps && <Searchbar map={map} mapApi={googlemaps} addPlace={addPlace} />}
+              <div style={{ width: "600px", height: "400px" }} className="googleMap">
+                <GoogleMap
+                  bootstrapURLKeys={{ key: key, libraries: "places" }}
+                  defaultZoom={0}
+                  defaultCenter={center}
+                  yesIWantToUseGoogleMapApiInternals
+                  onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                  onChildClick={mouseOver}
+                  onClick={() => {
+                    mouseOut();
+                  }}
+                >
+                  {places.length !== 0 &&
+                    places.map((place) => {
+                      return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
+                    })}
+                </GoogleMap>
+              </div>
+            </div>
           </div>
         ) : null}
         <div className="buttonBox">

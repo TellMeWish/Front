@@ -34,7 +34,7 @@ function Home() {
       <Card>
         <img></img>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
-          <span>나만의 버킷 리스트를</span>
+          <span>내 버킷 리스트를</span>
           <span>사람들에게</span>
           <span>공유해보세요</span>
         </div>
@@ -66,7 +66,7 @@ function Home() {
           </Btn>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
-          <span>지금</span>
+          <span>지금 바로</span>
           <span>
             <span style={{ color: "var(--color-beige)" }}>나만의 버킷리스트</span>를
           </span>

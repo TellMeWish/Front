@@ -72,6 +72,7 @@ function Detail() {
     axios.get(`${url}/post/${id}`).then((res) => {
       setPost(res.data.post);
       setComments([...res.data.post.commentList]);
+      console.log(res);
     });
   };
 

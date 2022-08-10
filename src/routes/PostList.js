@@ -26,6 +26,7 @@ let Post = styled.div`
 `;
 
 function PostList() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(0);
@@ -67,17 +68,25 @@ function PostList() {
   });
 
   const getItems = useCallback(async () => {
+    const config = {
+      method: "get",
+      url: `${url}/post/postList?page=${page}&size=9`,
+
+      Headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
     setLoading(true);
-    await axios
-      .get(`${url}/post/postList?page=${page}&size=9`)
+    await axios(config)
       .then((res) => {
         console.log(res);
         if (items) {
           setItems((prevState) => [...prevState, ...res.data.postList]);
         } else setItems((prevState) => [...prevState, ...res.data.postList]);
       })
-      .catch(() => {
+      .catch((err) => {
         console.log("실패함");
+        console.log(err);
       });
     setLoading(false);
   }, [page]);

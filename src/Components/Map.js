@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 function Map() {
   const [position, setPosition] = useState({});
   const [places, setPlaces] = useState([]);
-  const [target, setTarget] = useState(null);
+  const [target, setTarget] = useState(0);
   const [apiReady, setApiReady] = useState(false);
   const [map, setMap] = useState(null);
   const [googlemaps, setGooglemaps] = useState(null);
@@ -23,6 +23,12 @@ function Map() {
       setGooglemaps(maps);
     }
   };
+  const mouseOver = (key) => {
+    setTarget(key);
+  };
+  const mouseOut = (key) => {
+    setTarget(0);
+  };
   useEffect(() => {
     if (places[0]) setPosition({ lng: places[0].geometry.location.lng(), lat: places[0].geometry.location.lat() });
   }, [places]);
@@ -36,10 +42,15 @@ function Map() {
           defaultCenter={center}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          onChildClick={mouseOver}
+          onClick={() => {
+            mouseOut();
+          }}
         >
           {places.length !== 0 &&
             places.map((place) => {
-              return <Marker key={place.id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
+              console.log(place);
+              return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
             })}
         </GoogleMap>
       </div>

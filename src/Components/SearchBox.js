@@ -12,14 +12,10 @@ class SearchBox extends React.Component {
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport);
     } else {
-      map.setCenter(place.geometry.locatio);
+      map.setCenter(place.geometry.location);
       map.setZoom(12);
     }
-    console.log(selected);
     addPlace(selected);
-  };
-  onZoomChanged = ({ map, mapApi, addPlace } = this.props) => {
-    console.log("hi");
   };
 
   componentDidMount({ map, mapApi } = this.props) {
