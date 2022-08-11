@@ -70,7 +70,7 @@ function CreatePost() {
         files: files,
         location: position,
       },
-      Headers: {
+      headers: {
         Authorization: "Bearer " + token,
       },
     };
@@ -83,6 +83,7 @@ function CreatePost() {
       })
       .catch((err) => {
         alert("실패");
+        console.log(token);
         console.log(err);
       });
   };

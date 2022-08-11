@@ -72,7 +72,7 @@ function PostList() {
       method: "get",
       url: `${url}/post/postList?page=${page}&size=9`,
 
-      Headers: {
+      headers: {
         Authorization: "Bearer " + token,
       },
     };

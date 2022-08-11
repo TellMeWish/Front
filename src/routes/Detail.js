@@ -61,6 +61,7 @@ let Comment = styled.div`
 function Detail() {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
   let { id } = useParams();
   const [post, setPost] = useState("");
   const [comment, setComment] = useState("");
@@ -68,12 +69,23 @@ function Detail() {
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
 
-  const getItem = () => {
-    axios.get(`${url}/post/${id}`).then((res) => {
-      setPost(res.data.post);
-      setComments([...res.data.post.commentList]);
-      console.log(res);
-    });
+  const getItem = async () => {
+    const config = {
+      method: "get",
+      url: `${url}/post/${id}`,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    await axios(config)
+      .then((res) => {
+        setPost(res.data.post);
+        setComments([...res.data.post.commentList]);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -90,11 +102,18 @@ function Detail() {
     event.preventDefault();
     const data = {
       content: comment,
-      userId: 1,
       postId: id,
       secret: true,
     };
-    axios.post(`${url}/comment`, data).then((res) => {
+    const config = {
+      method: "post",
+      url: `${url}/comment`,
+      data: data,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then((res) => {
       console.log(res);
       getItem();
     });
@@ -103,12 +122,19 @@ function Detail() {
   const postReply = (pid) => {
     const data = {
       content: reply,
-      userId: 1,
       postId: id,
       secret: true,
       parentId: pid,
     };
-    axios.post(`${url}/comment`, data).then((res) => {
+    const config = {
+      method: "post",
+      url: `${url}/comment`,
+      data: data,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then((res) => {
       console.log(res);
       getItem();
     });
