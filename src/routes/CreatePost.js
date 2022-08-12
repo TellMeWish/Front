@@ -28,7 +28,8 @@ function CreatePost() {
   const [showMap, setShowMap] = useState(0);
   const [files, setFiles] = useState([]);
   const [location, setLocation] = useState({});
-  const [position, setPosition] = useState({});
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
   const [places, setPlaces] = useState([]);
   const [target, setTarget] = useState(0);
   const [apiReady, setApiReady] = useState(false);
@@ -54,22 +55,36 @@ function CreatePost() {
     setTarget(0);
   };
   useEffect(() => {
-    if (places[0]) setPosition({ longitude: places[0].geometry.location.lng(), latitude: places[0].geometry.location.lat() });
+    if (places[0]) {
+      setLat(places[0].geometry.location.lat());
+      setLng(places[0].geometry.location.lng());
+    }
   }, [places]);
+
   const submitPost = async (event) => {
+    var FormData = require("form-data");
+    var data = new FormData();
+    data.append(
+      "dto",
+      `{
+        "title":"${title}",
+        "isPrivate":"${isPrivate}",
+        "isParticipate":"${isParticipate}",
+        "category":"${category}",
+        "content":"${content}",
+        "location":{
+          "longitude":${lng},
+          "latitude":${lat}
+        }
+      }`,
+      { contentType: "application/json" }
+    );
+    data.append("img", files);
     event.preventDefault();
     const config = {
       method: "post",
       url: `${url}/post`,
-      data: {
-        isPrivate: isPrivate,
-        isParticipate: isParticipate,
-        category: category,
-        title: title,
-        content: content,
-        files: files,
-        location: position,
-      },
+      data: data,
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -213,6 +228,7 @@ function CreatePost() {
                 >
                   {places.length !== 0 &&
                     places.map((place) => {
+                      console.log(place.geometry.location.lat(), place.geometry.location.lng());
                       return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
                     })}
                 </GoogleMap>

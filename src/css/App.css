@@ -49,3 +49,18 @@ body {
     display: none;
   }
 }
+
+.modal-content {
+  width: 800px;
+}
+.modal-body {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-dialog {
+  width: 800px;
+}
+.modal {
+  --bs-modal-width: 800px;
+}

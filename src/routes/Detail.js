@@ -3,6 +3,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { url } from "../Url";
+import { Button, Modal } from "react-bootstrap";
+import Map from "../Components/Map";
 
 let Postbox = styled.div`
   width: 1200px;
@@ -37,7 +39,7 @@ let CommentForm = styled.form`
     height: 100px;
   }
 `;
-let Button = styled.button`
+let Btn = styled.button`
   width: 90px;
   color: #fff;
   background: var(--color-green);
@@ -68,6 +70,10 @@ function Detail() {
   const [comments, setComments] = useState([]);
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const getItem = async () => {
     const config = {
@@ -204,7 +210,16 @@ function Detail() {
         <PostContentBox>
           <div style={{ borderBottom: "2px solid black", paddingBottom: "10px" }}>
             <div style={{ fontSize: "50px" }}>{post.title}</div>
-            <div className="postCategory">카테고리 : {post.category}</div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div className="postCategory">카테고리 : {post.category}</div>
+              {post ? (
+                post.location.latitude ? (
+                  <Button variant="primary" onClick={handleShow}>
+                    지도보기
+                  </Button>
+                ) : null
+              ) : null}
+            </div>
           </div>
           <div className="postContent" style={{ height: "300px", marginTop: "10px" }}>
             {post.content}
@@ -227,6 +242,16 @@ function Detail() {
           </div>
         </PostContentBox>
       </Postbox>
+      {post ? (
+        <Modal style={{ display: "flex", alignItems: "center", justifyContent: "center" }} show={show} onHide={handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>버킷리스트 위치</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Map lng={post.location.longitude} lat={post.location.latitude}></Map>
+          </Modal.Body>
+        </Modal>
+      ) : null}
       <Commentbox>
         <div>{comments.length}개의 댓글</div>
         <CommentForm onSubmit={postComment}>
@@ -237,13 +262,13 @@ function Detail() {
               setComment(e.target.value);
             }}
           ></textarea>
-          <Button
+          <Btn
             onClick={() => {
               document.getElementById("comment").value = "";
             }}
           >
             댓글 작성
-          </Button>
+          </Btn>
         </CommentForm>
         <div style={{ display: "flex", flexDirection: "column-reverse" }}>
           {comments?.map((comment, i) => {

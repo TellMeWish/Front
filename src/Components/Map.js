@@ -3,14 +3,14 @@ import Marker from "../Components/Marker";
 import Searchbar from "../Components/Searchbar";
 import { key } from "../Key";
 import React, { useEffect, useState } from "react";
-function Map() {
+function Map(props) {
   const [position, setPosition] = useState({});
   const [places, setPlaces] = useState([]);
   const [target, setTarget] = useState(0);
   const [apiReady, setApiReady] = useState(false);
   const [map, setMap] = useState(null);
   const [googlemaps, setGooglemaps] = useState(null);
-  const [center, setCenter] = useState({ lat: 37.5, lng: 127 });
+  const [center, setCenter] = useState({});
   const addPlace = (places) => {
     if (places) {
       setPlaces(places);
@@ -32,13 +32,15 @@ function Map() {
   useEffect(() => {
     if (places[0]) setPosition({ lng: places[0].geometry.location.lng(), lat: places[0].geometry.location.lat() });
   }, [places]);
+  useEffect(() => {
+    setCenter({ lat: props.lat, lng: props.lng });
+  }, []);
   return (
     <div>
-      {apiReady && googlemaps && <Searchbar map={map} mapApi={googlemaps} addPlace={addPlace} />}
       <div style={{ width: "600px", height: "400px" }} className="googleMap">
         <GoogleMap
           bootstrapURLKeys={{ key: key, libraries: "places" }}
-          defaultZoom={0}
+          defaultZoom={17}
           defaultCenter={center}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
@@ -47,6 +49,7 @@ function Map() {
             mouseOut();
           }}
         >
+          <Marker lat={center.lat} lng={center.lng}></Marker>
           {places.length !== 0 &&
             places.map((place) => {
               console.log(place);
