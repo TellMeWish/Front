@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { url } from "../Url";
+import axios from "axios";
 import styled from "styled-components";
 
 let Menu = styled.div`
@@ -15,9 +17,25 @@ let Category = styled.div`
     font-size: 15px;
   }
 `;
+let Select = styled.select`
+  width: 78px;
+  height: 33px;
+  border: none;
+  padding-left: 5px;
+  border-radius: 0px;
+  left: 80px;
+  top: 3px;
+  position: relative;
+  &:focus {
+    outline: none;
+  }
+`;
 function NavBar() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const [category, setCategory] = useState(0);
+  const [showcategory, setshowCategory] = useState(0);
+  const [category, setCategory] = useState("");
+  const [keyword, setKeyword] = useState("");
   return (
     <div className="nav_bar">
       <Menu
@@ -30,9 +48,37 @@ function NavBar() {
       </Menu>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>
-          <div className="searchBox" style={{ marginTop: "33px" }}>
-            <input style={{ width: "500px", height: "40px", marginLeft: "20px", marginBottom: "20px", paddingLeft: "10px" }} placeholder="ooo 여행"></input>
-            <button style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}>검색</button>
+          <div className="searchBox">
+            <Select
+              onChange={(e) => {
+                setCategory(e.target.value);
+              }}
+            >
+              <option value="전체" selected>
+                전체
+              </option>
+              <option value="여행">여행</option>
+              <option value="운동">운동</option>
+              <option value="공부">공부</option>
+              <option value="음식">음식</option>
+              <option value="취미">취미</option>
+              <option value="갖고싶은것">갖고싶은것</option>
+            </Select>
+            <input
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
+              style={{ width: "500px", height: "40px", marginBottom: "20px", paddingLeft: "90px" }}
+              placeholder="ooo 여행"
+            ></input>
+            <button
+              onClick={() => {
+                navigate(`/postList/${category}/${keyword}`);
+              }}
+              style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}
+            >
+              검색
+            </button>
           </div>
           <div style={{ display: "flex", fontSize: "13px" }}>
             <Menu
@@ -45,18 +91,18 @@ function NavBar() {
             <div style={{ position: "relative" }}>
               <Menu
                 onClick={(e) => {
-                  if (category) {
+                  if (showcategory) {
                     e.target.style.borderBottom = "none";
-                    setCategory(0);
+                    setshowCategory(0);
                   } else {
                     e.target.style.borderBottom = "1px solid black";
-                    setCategory(1);
+                    setshowCategory(1);
                   }
                 }}
               >
                 카테고리 v
               </Menu>
-              {category ? (
+              {showcategory ? (
                 <div
                   style={{
                     position: "fixed",

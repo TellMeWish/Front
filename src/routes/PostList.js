@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { url } from "../Url";
 import "../css/PostList.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 let Post = styled.div`
   width: 350px;
   height: 400px;
@@ -36,6 +36,7 @@ function PostList() {
   const [BtnStatus, setBtnStatus] = useState(false);
   const [ref, inView] = useInView();
 
+  let { category, keyword } = useParams();
   const handleFollow = () => {
     setScrollY(window.pageYOffset);
     if (ScrollY > 100) {
@@ -68,14 +69,32 @@ function PostList() {
   });
 
   const getItems = useCallback(async () => {
-    const config = {
-      method: "get",
-      url: `${url}/post/postList?page=${page}&size=9`,
+    let config = {};
+    if (category || keyword) {
+      console.log("search");
+      config = {
+        method: "post",
+        url: `${url}/post/search`,
+        data: {
+          keyword: keyword,
+          category: category,
+        },
 
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+    } else {
+      console.log("showall");
+      config = {
+        method: "get",
+        url: `${url}/post/postList?page=${page}&size=9`,
+
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+    }
     setLoading(true);
     await axios(config)
       .then((res) => {
@@ -92,7 +111,7 @@ function PostList() {
   }, [page]);
 
   useEffect(() => {
-    getItems();
+    getItems(category, keyword);
   }, [getItems]);
 
   useEffect(() => {
@@ -129,7 +148,7 @@ function PostList() {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>
                   </div>
-                  {item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div>}
+                  {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>❤️ : {item.likeCount}</div>
                     <div style={{ marginLeft: "10px" }}>조회수 : {item.viewCount}</div>
@@ -149,7 +168,7 @@ function PostList() {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>
                   </div>
-                  {item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div>}
+                  {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>❤️ : {item.likeCount}</div>
                     <div style={{ marginLeft: "10px" }}>조회수 : {item.viewCount}</div>

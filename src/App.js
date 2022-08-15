@@ -19,6 +19,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<Signup />} />
+        <Route path="/postList/:category/:keyword" element={<PostList />} />
+        <Route path="/postList//:keyword" element={<PostList />} />
+        <Route path="/postList/:category/" element={<PostList />} />
         <Route path="/postList" element={<PostList />} />
         <Route path="/createPost" element={<CreatePost />} />
         <Route path="/updatePost/:id" element={<UpdatePost />} />

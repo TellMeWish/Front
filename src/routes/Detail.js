@@ -62,7 +62,6 @@ let Comment = styled.div`
 `;
 function Detail() {
   const navigate = useNavigate();
-
   const token = localStorage.getItem("token");
   let { id } = useParams();
   const [post, setPost] = useState("");
@@ -71,6 +70,7 @@ function Detail() {
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
   const [show, setShow] = useState(false);
+  const [photo, setPhoto] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -87,13 +87,41 @@ function Detail() {
       .then((res) => {
         setPost(res.data.post);
         setComments([...res.data.post.commentList]);
+        if (res.data.post.photoIdList[0]) {
+          getPhoto(res.data.post.photoIdList[0]);
+        }
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  const getPhoto = async (id) => {
+    const config = {
+      method: "get",
+      url: `${url}/photo/${id}`,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    await axios(config)
+      .then((res) => {
+        setPhoto(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getCommentSize = () => {
+    let size = 0;
+    post.commentList.map((item) => {
+      size += 1;
+      item.commentList.map(() => {
+        size += 1;
+      });
+    });
+    return size;
+  };
   useEffect(() => {
     getItem();
   }, []);
@@ -124,7 +152,21 @@ function Detail() {
       getItem();
     });
   };
-
+  const likePost = () => {
+    const config = {
+      method: "post",
+      url: `${url}/post/like`,
+      data: {
+        postId: id,
+      },
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then(() => {
+      getItem();
+    });
+  };
   const postReply = (pid) => {
     const data = {
       content: reply,
@@ -206,18 +248,17 @@ function Detail() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "100px" }}>
       <Postbox>
-        <Postimg src="/img/noimage.png"></Postimg>
+        {photo ? <Postimg src={"data:image/png;base64, " + photo} /> : <Postimg src="/img/noimage.png" />}
         <PostContentBox>
           <div style={{ borderBottom: "2px solid black", paddingBottom: "10px" }}>
             <div style={{ fontSize: "50px" }}>{post.title}</div>
+            <div style={{ fontSize: "12px", marginBottom: "15px" }}>작성자 : {post?.post_user_id?.nickname}</div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div className="postCategory">카테고리 : {post.category}</div>
-              {post ? (
-                post.location.latitude ? (
-                  <Button variant="primary" onClick={handleShow}>
-                    지도보기
-                  </Button>
-                ) : null
+              {post?.location?.latitude ? (
+                <Button variant="primary" onClick={handleShow}>
+                  지도보기
+                </Button>
               ) : null}
             </div>
           </div>
@@ -225,6 +266,14 @@ function Detail() {
             {post.content}
           </div>
           <div style={{ display: "flex" }}>
+            <button
+              onClick={() => {
+                likePost();
+              }}
+            >
+              ❤️ {post.likeCount}
+            </button>
+
             <button
               onClick={() => {
                 navigate(`/updatePost/${id}`);
@@ -242,18 +291,16 @@ function Detail() {
           </div>
         </PostContentBox>
       </Postbox>
-      {post ? (
-        <Modal style={{ display: "flex", alignItems: "center", justifyContent: "center" }} show={show} onHide={handleClose} animation={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>버킷리스트 위치</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Map lng={post.location.longitude} lat={post.location.latitude}></Map>
-          </Modal.Body>
-        </Modal>
-      ) : null}
+      <Modal style={{ display: "flex", alignItems: "center", justifyContent: "center" }} show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>버킷리스트 위치</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Map lng={post?.location?.longitude} lat={post?.location?.latitude}></Map>
+        </Modal.Body>
+      </Modal>
       <Commentbox>
-        <div>{comments.length}개의 댓글</div>
+        <div>{getCommentSize()}개의 댓글</div>
         <CommentForm onSubmit={postComment}>
           <textarea
             id="comment"
@@ -277,8 +324,8 @@ function Detail() {
                 <Comment>
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "950px", marginBottom: "30px" }}>
-                      <div style={{ fontSize: "20px", display: "flex", flexDirection: "column" }}>
-                        닉네임
+                      <div style={{ fontSize: "16px", display: "flex", flexDirection: "column" }}>
+                        {comment.user.nickname}
                         <div style={{ fontSize: "10px", marginTop: "5px" }}>{comment.createdAt}</div>
                       </div>
                       <div class="btns">
@@ -293,9 +340,15 @@ function Detail() {
                         </div>
                         <div
                           onClick={() => {
-                            axios.delete(`${url}/comment/${comment.id}`).then(() => {
-                              getItem();
-                            });
+                            axios
+                              .delete(`${url}/comment/${comment.id}`, {
+                                headers: {
+                                  Authorization: "Bearer " + token,
+                                },
+                              })
+                              .then(() => {
+                                getItem();
+                              });
                           }}
                         >
                           삭제
@@ -323,7 +376,9 @@ function Detail() {
                         </div>
                       </div>
                       <div>
-                        <div id={"content" + i}>{comment.content}</div>
+                        <div style={{ fontSize: "20px", fontWeight: "400" }} id={"content" + i}>
+                          {comment.content}
+                        </div>
                         <div style={{ marginTop: "20px" }}>
                           <span
                             id={`showReply${i}`}
@@ -370,8 +425,8 @@ function Detail() {
                     return (
                       <div style={{ width: "1000px", background: "#F8F9FA" }}>
                         <Comment style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", marginBottom: "20px", background: "#F8F9FA" }}>
-                          <div style={{ fontSize: "20px", display: "flex", justifyContent: "space-between" }}>
-                            닉네임
+                          <div style={{ fontSize: "16px", display: "flex", justifyContent: "space-between" }}>
+                            {com.user.nickname}
                             <div className="btns">
                               <div
                                 id={`updateReply${index}`}
@@ -393,9 +448,15 @@ function Detail() {
                               </div>
                               <div
                                 onClick={() => {
-                                  axios.delete(`${url}/comment/${com.id}`).then(() => {
-                                    getItem();
-                                  });
+                                  axios
+                                    .delete(`${url}/comment/${com.id}`, {
+                                      headers: {
+                                        Authorization: "Bearer " + token,
+                                      },
+                                    })
+                                    .then(() => {
+                                      getItem();
+                                    });
                                 }}
                               >
                                 삭제
@@ -403,7 +464,7 @@ function Detail() {
                             </div>
                           </div>
                           <div style={{ fontSize: "10px", marginTop: "5px" }}>{com.createdAt}</div>
-                          <div style={{ margin: "20px 0" }} id={`replyContent${index}`}>
+                          <div style={{ fontSize: "20px", margin: "20px 0" }} id={`replyContent${index}`}>
                             {com.content}
                           </div>
                           <div>
