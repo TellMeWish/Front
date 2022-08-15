@@ -167,7 +167,7 @@ function PostList() {
                       <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
                     </div>
                     <div style={{ marginLeft: "10px" }}>
-                      <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {item.viewCount}
+                      <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
                     </div>
                   </div>
                   <div style={{ marginTop: "5px" }}>
