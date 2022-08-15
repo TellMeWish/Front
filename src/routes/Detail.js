@@ -114,7 +114,7 @@ function Detail() {
   };
   const getCommentSize = () => {
     let size = 0;
-    post.commentList.map((item) => {
+    post?.commentList?.map((item) => {
       size += 1;
       item.commentList.map(() => {
         size += 1;
@@ -388,6 +388,7 @@ function Detail() {
                           >
                             +답글
                           </span>
+                          <span>({comment.commentList.length})</span>
                           <span
                             style={{ display: "none", marginLeft: "30px" }}
                             id={"reply" + i}

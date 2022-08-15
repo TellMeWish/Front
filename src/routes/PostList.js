@@ -67,6 +67,16 @@ function PostList() {
       window.removeEventListener("scroll", handleFollow);
     };
   });
+  const getCommentSize = (post) => {
+    let size = 0;
+    post.commentList.map((item) => {
+      size += 1;
+      item.commentList.map(() => {
+        size += 1;
+      });
+    });
+    return size;
+  };
 
   const getItems = useCallback(async () => {
     let config = {};
@@ -150,11 +160,19 @@ function PostList() {
                   </div>
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
-                    <div>❤️ : {item.likeCount}</div>
-                    <div style={{ marginLeft: "10px" }}>조회수 : {item.viewCount}</div>
-                    <div style={{ marginLeft: "10px" }}></div>
+                    <div>
+                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                    </div>
+                    <div style={{ marginLeft: "10px" }}>
+                      <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
+                    </div>
+                    <div style={{ marginLeft: "10px" }}>
+                      <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {item.viewCount}
+                    </div>
                   </div>
-                  <div style={{ marginTop: "5px" }}>시간 : {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</div>
+                  <div style={{ marginTop: "5px" }}>
+                    <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
+                  </div>
                 </div>
               </Post>
             ) : (
@@ -170,11 +188,19 @@ function PostList() {
                   </div>
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
-                    <div>❤️ : {item.likeCount}</div>
-                    <div style={{ marginLeft: "10px" }}>조회수 : {item.viewCount}</div>
-                    <div style={{ marginLeft: "10px" }}></div>
+                    <div>
+                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                    </div>
+                    <div style={{ marginLeft: "10px" }}>
+                      <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
+                    </div>
+                    <div style={{ marginLeft: "10px" }}>
+                      <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
+                    </div>
                   </div>
-                  <div style={{ marginTop: "5px" }}>시간 : {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</div>
+                  <div style={{ marginTop: "5px" }}>
+                    <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
+                  </div>
                 </div>
               </Post>
             );
