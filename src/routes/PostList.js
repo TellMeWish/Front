@@ -69,7 +69,7 @@ function PostList() {
   });
   const getCommentSize = (post) => {
     let size = 0;
-    post.commentList.map((item) => {
+    post?.commentList?.map((item) => {
       size += 1;
       item.commentList.map(() => {
         size += 1;
@@ -80,16 +80,15 @@ function PostList() {
 
   const getItems = useCallback(async () => {
     let config = {};
+    let data = new FormData();
     if (category || keyword) {
-      console.log("search");
+      console.log(category, keyword);
+      data.append("keyword", keyword ?? "");
+      data.append("category", category ?? "");
       config = {
         method: "post",
         url: `${url}/post/search`,
-        data: {
-          keyword: keyword,
-          category: category,
-        },
-
+        data: data,
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -108,10 +107,16 @@ function PostList() {
     setLoading(true);
     await axios(config)
       .then((res) => {
+        console.log(config);
         console.log(res);
-        if (items) {
-          setItems((prevState) => [...prevState, ...res.data.postList]);
-        } else setItems((prevState) => [...prevState, ...res.data.postList]);
+        if (!category && !keyword) {
+          if (items) {
+            setItems((prevState) => [...prevState, ...res.data.postList]);
+          } else setItems((prevState) => [...prevState, ...res.data.postList]);
+        } else {
+          if (items) setItems([]);
+          setItems(res.data.postList);
+        }
       })
       .catch((err) => {
         console.log("실패함");

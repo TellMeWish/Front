@@ -54,7 +54,7 @@ function NavBar() {
                 setCategory(e.target.value);
               }}
             >
-              <option value="전체" selected>
+              <option value="" selected>
                 전체
               </option>
               <option value="여행">여행</option>
@@ -74,6 +74,7 @@ function NavBar() {
             <button
               onClick={() => {
                 navigate(`/postList/${category}/${keyword}`);
+                window.location.reload();
               }}
               style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}
             >
@@ -84,6 +85,7 @@ function NavBar() {
             <Menu
               onClick={() => {
                 navigate("/postList");
+                window.location.reload();
               }}
             >
               버킷리스트 목록

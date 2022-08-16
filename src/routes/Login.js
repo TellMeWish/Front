@@ -28,6 +28,7 @@ function Login() {
         localStorage.clear();
         localStorage.setItem("token", res.data.token);
         console.log(localStorage.getItem("token"));
+        console.log(res);
       })
       .catch(() => {});
   };
