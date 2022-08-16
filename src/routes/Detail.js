@@ -266,28 +266,42 @@ function Detail() {
             {post.content}
           </div>
           <div style={{ display: "flex" }}>
-            <button
-              onClick={() => {
-                likePost();
-              }}
-            >
-              ❤️ {post.likeCount}
-            </button>
-
-            <button
-              onClick={() => {
-                navigate(`/updatePost/${id}`);
-              }}
-            >
-              수정
-            </button>
-            <button
-              onClick={() => {
-                deletePost();
-              }}
-            >
-              삭제
-            </button>
+            {post.isLike ? (
+              <button
+                onClick={() => {
+                  likePost();
+                }}
+                style={{ color: "blue" }}
+              >
+                ❤️ {post.likeCount}
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  likePost();
+                }}
+              >
+                ❤️ {post.likeCount}
+              </button>
+            )}
+            {post.isMyPost ? (
+              <div>
+                <button
+                  onClick={() => {
+                    navigate(`/updatePost/${id}`);
+                  }}
+                >
+                  수정
+                </button>
+                <button
+                  onClick={() => {
+                    deletePost();
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            ) : null}
           </div>
         </PostContentBox>
       </Postbox>
