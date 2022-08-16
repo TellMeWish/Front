@@ -60,6 +60,16 @@ let Comment = styled.div`
     justify-content: space-between;
   }
 `;
+let Like = styled.img`
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  margin-right: 10px;
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
 function Detail() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -265,24 +275,27 @@ function Detail() {
           <div className="postContent" style={{ height: "300px", marginTop: "10px" }}>
             {post.content}
           </div>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             {post.isLike ? (
-              <button
-                onClick={() => {
-                  likePost();
-                }}
-                style={{ color: "blue" }}
-              >
-                ❤️ {post.likeCount}
-              </button>
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <Like
+                  onClick={() => {
+                    likePost();
+                  }}
+                  src="/img/like.png"
+                />
+                {post.likeCount}
+              </div>
             ) : (
-              <button
-                onClick={() => {
-                  likePost();
-                }}
-              >
-                ❤️ {post.likeCount}
-              </button>
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <Like
+                  onClick={() => {
+                    likePost();
+                  }}
+                  src="/img/unlike.png"
+                />
+                {post.likeCount}
+              </div>
             )}
             {post.isMyPost ? (
               <div>

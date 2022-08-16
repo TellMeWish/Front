@@ -166,7 +166,7 @@ function PostList() {
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>
-                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}
                     </div>
                     <div style={{ marginLeft: "10px" }}>
                       <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
@@ -194,7 +194,7 @@ function PostList() {
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>
-                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                      <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}
                     </div>
                     <div style={{ marginLeft: "10px" }}>
                       <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
@@ -212,10 +212,12 @@ function PostList() {
           }
         })}
       </div>
-      {isLoading ? (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button className="loading"></button>
-        </div>
+      {!category && !keyword ? (
+        isLoading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button className="loading"></button>
+          </div>
+        ) : null
       ) : null}
     </div>
   );

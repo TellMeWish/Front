@@ -3,6 +3,7 @@ import { useState } from "react";
 import { url } from "../Url";
 import axios from "axios";
 import styled from "styled-components";
+import { NavDropdown } from "react-bootstrap";
 
 let Menu = styled.div`
   cursor: pointer;
@@ -90,45 +91,17 @@ function NavBar() {
             >
               버킷리스트 목록
             </Menu>
-            <div style={{ position: "relative" }}>
-              <Menu
-                onClick={(e) => {
-                  if (showcategory) {
-                    e.target.style.borderBottom = "none";
-                    setshowCategory(0);
-                  } else {
-                    e.target.style.borderBottom = "1px solid black";
-                    setshowCategory(1);
-                  }
-                }}
-              >
-                카테고리 v
-              </Menu>
-              {showcategory ? (
-                <div
-                  style={{
-                    position: "fixed",
-                    top: "150px",
-                    width: "90px",
-                    borderRadius: "4px",
-                    border: "1px solid black",
-                    background: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    marginLeft: "20px",
-                  }}
-                >
-                  <Category>여행</Category>
-                  <Category>운동</Category>
-                  <Category>공부</Category>
-                  <Category>음식</Category>
-                  <Category>취미</Category>
-                  <Category>갖고싶은것</Category>
-                  <Category>기타</Category>
-                </div>
-              ) : null}
-            </div>
+            <Menu>
+              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/postList/여행/">여행</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/운동/">운동</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/공부/">공부</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/음식/">음식</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/취미/">취미</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/갖고싶은것/">갖고싶은것</NavDropdown.Item>
+                <NavDropdown.Item href="/postList/기타/">기타</NavDropdown.Item>
+              </NavDropdown>
+            </Menu>
             <Menu
               onClick={() => {
                 navigate("/createPost");
