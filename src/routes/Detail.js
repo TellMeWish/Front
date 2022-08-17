@@ -98,7 +98,7 @@ function Detail() {
       .then((res) => {
         setPost(res.data.post);
         setComments([...res.data.post.commentList]);
-        if (res.data.post.photoIdList[0]) {
+        if (res.data.post.photoIdList[0] && !photo[0]) {
           getPhoto(res.data.post.photoIdList);
         }
         console.log(res);
@@ -108,7 +108,7 @@ function Detail() {
       });
   };
   const getPhoto = async (arr) => {
-    arr.map(async (id, i) => {
+    arr.map(async (id) => {
       const config = {
         method: "get",
         url: `${url}/photo/${id}`,

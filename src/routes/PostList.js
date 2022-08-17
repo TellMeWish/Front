@@ -35,6 +35,7 @@ function PostList() {
   const [ScrollY, setScrollY] = useState(0);
   const [BtnStatus, setBtnStatus] = useState(false);
   const [ref, inView] = useInView();
+  const [thumbnail, setThumbnail] = useState([]);
 
   let { category, keyword } = useParams();
   const handleFollow = () => {
@@ -107,16 +108,28 @@ function PostList() {
     setLoading(true);
     await axios(config)
       .then((res) => {
-        console.log(config);
-        console.log(res);
+        console.log(res.data);
         if (!category && !keyword) {
-          if (items) {
-            setItems((prevState) => [...prevState, ...res.data.postList]);
-          } else setItems((prevState) => [...prevState, ...res.data.postList]);
+          setItems((prevState) => [...prevState, ...res.data.postList]);
         } else {
-          if (items) setItems([]);
           setItems(res.data.postList);
         }
+        res.data.postList.map((post) => {
+          if (post.photoId) {
+            const config = {
+              method: "get",
+              url: `${url}/photo/${post.photoId}`,
+              responseType: "blob",
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            };
+            axios(config).then((res) => {
+              const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
+              setThumbnail((prevState) => [...prevState, { url: url, id: post.photoId }]);
+            });
+          }
+        });
       })
       .catch((err) => {
         console.log("실패함");
@@ -158,7 +171,7 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                <img src="/img/noimage.png"></img>
+                {item.photoId ? <img src={thumbnail.find((e) => e.id === item.photoId)?.url} /> : <img src="/img/noimage.png" />}
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>
@@ -186,7 +199,7 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                <img src="/img/noimage.png"></img>
+                {item.photoId ? <img src={thumbnail.find((e) => e.id === item.photoId)?.url} /> : <img src="/img/noimage.png" />}
                 <div className="textBox">
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="postTitle">제목 : {item.title}</div>

@@ -65,3 +65,11 @@ body {
 .modal {
   --bs-modal-width: 800px;
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: grey;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
