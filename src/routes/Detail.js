@@ -81,7 +81,7 @@ function Detail() {
   const [reply, setReply] = useState("");
   const [show, setShow] = useState(false);
   const [photo, setPhoto] = useState("");
-
+  const progress = ["진행 전", "진행 중", "진행 완료"];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -116,7 +116,8 @@ function Detail() {
     };
     await axios(config)
       .then((res) => {
-        setPhoto(res.data);
+        const img = JSON.stringify(res.data);
+        setPhoto(img.slice(1, img.length - 1));
       })
       .catch((err) => {
         console.log(err);
@@ -137,10 +138,16 @@ function Detail() {
   }, []);
 
   const deletePost = () => {
-    axios.delete(`${url}/post/${id}`).then(() => {
-      alert("삭제되었습니다.");
-      navigate("/postList");
-    });
+    axios
+      .delete(`${url}/post/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then(() => {
+        alert("삭제되었습니다.");
+        window.history.back();
+      });
   };
   const postComment = (event) => {
     event.preventDefault();
@@ -258,13 +265,15 @@ function Detail() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "100px" }}>
       <Postbox>
-        {photo ? <Postimg src={"data:image/png;base64, " + photo} /> : <Postimg src="/img/noimage.png" />}
+        {photo ? <Postimg src={`data:image/png;base64,${photo}`} /> : <Postimg src="/img/noimage.png" />}
         <PostContentBox>
           <div style={{ borderBottom: "2px solid black", paddingBottom: "10px" }}>
             <div style={{ fontSize: "50px" }}>{post.title}</div>
             <div style={{ fontSize: "12px", marginBottom: "15px" }}>작성자 : {post?.post_user_id?.nickname}</div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div className="postCategory">카테고리 : {post.category}</div>
+              <div className="postCategory">
+                카테고리 : {post.category} | 상태 : {progress[post.isProgress]}
+              </div>
               {post?.location?.latitude ? (
                 <Button variant="primary" onClick={handleShow}>
                   지도보기

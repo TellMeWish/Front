@@ -1,9 +1,10 @@
 {
-  "title": "지도없음",
-  "content": "content",
+  "title": "제목",
+  "content": "내용",
   "category": "여행",
   "isParticipate": 0,
   "isPrivate": 0,
+  "isProgress": 1,
   "location": {
     "longitude": "",
     "latitude": ""

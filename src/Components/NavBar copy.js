@@ -9,15 +9,6 @@ let Menu = styled.div`
   cursor: pointer;
   margin-left: 40px;
 `;
-let Category = styled.div`
-  height: 30px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    font-size: 15px;
-  }
-`;
 let Select = styled.select`
   width: 78px;
   height: 33px;
