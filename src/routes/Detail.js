@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { url } from "../Url";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Carousel } from "react-bootstrap";
 import Map from "../Components/Map";
 
 let Postbox = styled.div`
@@ -80,7 +80,8 @@ function Detail() {
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
   const [show, setShow] = useState(false);
-  const [photo, setPhoto] = useState("");
+
+  const [photo, setPhoto] = useState([]);
   const progress = ["진행 전", "진행 중", "진행 완료"];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -98,7 +99,7 @@ function Detail() {
         setPost(res.data.post);
         setComments([...res.data.post.commentList]);
         if (res.data.post.photoIdList[0]) {
-          getPhoto(res.data.post.photoIdList[0]);
+          getPhoto(res.data.post.photoIdList);
         }
         console.log(res);
       })
@@ -106,22 +107,21 @@ function Detail() {
         console.log(err);
       });
   };
-  const getPhoto = async (id) => {
-    const config = {
-      method: "get",
-      url: `${url}/photo/${id}`,
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
-    await axios(config)
-      .then((res) => {
-        const img = JSON.stringify(res.data);
-        setPhoto(img.slice(1, img.length - 1));
-      })
-      .catch((err) => {
-        console.log(err);
+  const getPhoto = async (arr) => {
+    arr.map(async (id, i) => {
+      const config = {
+        method: "get",
+        url: `${url}/photo/${id}`,
+        responseType: "blob",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      await axios(config).then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
+        setPhoto((currentArray) => [url, ...currentArray]);
       });
+    });
   };
   const getCommentSize = () => {
     let size = 0;
@@ -133,6 +133,7 @@ function Detail() {
     });
     return size;
   };
+
   useEffect(() => {
     getItem();
   }, []);
@@ -265,7 +266,21 @@ function Detail() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "100px" }}>
       <Postbox>
-        {photo ? <Postimg src={`data:image/png;base64,${photo}`} /> : <Postimg src="/img/noimage.png" />}
+        {photo[0] ? (
+          photo.length > 1 ? (
+            <Carousel variant="dark" style={{ width: "500px", height: "500px", marginRight: "100px" }}>
+              {photo.map((url) => (
+                <Carousel.Item>
+                  <Postimg src={url} />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          ) : (
+            <Postimg src={photo[0]} />
+          )
+        ) : (
+          <Postimg src="/img/noimage.png" />
+        )}
         <PostContentBox>
           <div style={{ borderBottom: "2px solid black", paddingBottom: "10px" }}>
             <div style={{ fontSize: "50px" }}>{post.title}</div>
