@@ -57,12 +57,7 @@ function Profile() {
   const navigate = useNavigate();
   const [list, setList] = useState(1);
   const [items, setItems] = useState([]);
-  const radios = [
-    { name: "전체", value: "1" },
-    { name: "진행 예정", value: "2" },
-    { name: "진행 중", value: "3" },
-    { name: "진행 완료", value: "4" },
-  ];
+  const [progress, setProgress] = useState("");
 
   useEffect(() => {
     getMyPost();
@@ -71,6 +66,10 @@ function Profile() {
   useEffect(() => {
     if (document.getElementById("inline-radio-1")) document.getElementById("inline-radio-1").checked = true;
   }, [list]);
+
+  const handleChange = (e) => {
+    setProgress(e.target.value);
+  };
 
   const getCommentSize = (post) => {
     let size = 0;
@@ -96,7 +95,6 @@ function Profile() {
       let arr = res.data.postList;
       setItems([...arr]);
     });
-    console.log(items);
   };
 
   const getMyLikedPost = () => {
@@ -154,45 +152,46 @@ function Profile() {
             <Form>
               {["radio"].map((type) => (
                 <div key={`inline-radio`} className="mb-3">
-                  <Form.Check inline label="전체" name="group1" type={type} id={`inline-${type}-1`} />
-                  <Form.Check inline label="진행 예정" name="group1" type={type} id={`inline-${type}-2`} />
-                  <Form.Check inline label="진행 중" name="group1" type={type} id={`inline-${type}-3`} />
-                  <Form.Check inline label="진행 완료" name="group1" type={type} id={`inline-${type}-4`} />
+                  <Form.Check inline label="전체" name="group1" value="" checked={progress === ""} onChange={handleChange} />
+                  <Form.Check inline label="진행 예정" name="group1" value="0" checked={progress === "0"} onChange={handleChange} />
+                  <Form.Check inline label="진행 중" name="group1" value="1" checked={progress === "1"} onChange={handleChange} />
+                  <Form.Check inline label="진행 완료" name="group1" value="2" checked={progress === "2"} onChange={handleChange} />
                 </div>
               ))}
             </Form>
             <div>버킷리스트 목록</div>
             <div className="postList">
-              {items.map((item, i) => {
-                return (
-                  <Post
-                    onClick={() => {
-                      navigate(`/detail/${item.id}`);
-                    }}
-                  >
-                    <img src="/img/noimage.png"></img>
-                    <div className="textBox">
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div className="postTitle">제목 : {item.title}</div>
-                      </div>
-                      {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
-                      <div style={{ display: "flex", marginTop: "50px" }}>
-                        <div>
-                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+              {items?.map((item, i) => {
+                if (!progress || item.isProgress == progress)
+                  return (
+                    <Post
+                      onClick={() => {
+                        navigate(`/detail/${item.id}`);
+                      }}
+                    >
+                      <img src="/img/noimage.png"></img>
+                      <div className="textBox">
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <div className="postTitle">제목 : {item.title}</div>
                         </div>
-                        <div style={{ marginLeft: "10px" }}>
-                          <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
+                        {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
+                        <div style={{ display: "flex", marginTop: "50px" }}>
+                          <div>
+                            <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}
+                          </div>
+                          <div style={{ marginLeft: "10px" }}>
+                            <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
+                          </div>
+                          <div style={{ marginLeft: "10px" }}>
+                            <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
+                          </div>
                         </div>
-                        <div style={{ marginLeft: "10px" }}>
-                          <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
+                        <div style={{ marginTop: "5px" }}>
+                          <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
                         </div>
                       </div>
-                      <div style={{ marginTop: "5px" }}>
-                        <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
-                      </div>
-                    </div>
-                  </Post>
-                );
+                    </Post>
+                  );
               })}
             </div>
           </div>

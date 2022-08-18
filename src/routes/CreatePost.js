@@ -27,7 +27,6 @@ function CreatePost() {
   const [content, setContent] = useState("");
   const [showMap, setShowMap] = useState(0);
   const [files, setFiles] = useState([]);
-  const [location, setLocation] = useState({});
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [places, setPlaces] = useState([]);
@@ -36,11 +35,15 @@ function CreatePost() {
   const [map, setMap] = useState(null);
   const [googlemaps, setGooglemaps] = useState(null);
   const [center, setCenter] = useState({ lat: 37.5, lng: 127 });
+
+  const [imgs, setImg] = useState([]);
+
   const addPlace = (places) => {
     if (places) {
       setPlaces(places);
     }
   };
+
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
       setApiReady(true);
@@ -48,6 +51,7 @@ function CreatePost() {
       setGooglemaps(maps);
     }
   };
+
   const mouseOver = (key) => {
     setTarget(key);
   };
@@ -62,25 +66,30 @@ function CreatePost() {
   }, [places]);
 
   const submitPost = async (event) => {
+    event.preventDefault();
+
     var FormData = require("form-data");
     var data = new FormData();
-    data.append(
-      "dto",
-      `{
-        "title":"${title}",
-        "isPrivate":"${isPrivate}",
-        "isParticipate":"${isParticipate}",
-        "category":"${category}",
-        "content":"${content}",
-        "location":{
-          "longitude":${lng},
-          "latitude":${lat}
-        }
-      }`,
-      { contentType: "application/json" }
-    );
-    data.append("img", files);
-    event.preventDefault();
+
+    let postContent = {
+      title: title,
+      isPrivate: isPrivate,
+      isParticipate: isParticipate,
+      category: category,
+      content: content,
+      location: {
+        longitude: lng,
+        latitude: lat,
+      },
+    };
+    data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
+    //data.append("img", files);
+    imgs.map((img) => {
+      data.append("img", img);
+    });
+
+    // data.append("review", new Blob([JSON.stringify(content)], { type: "application/json" }));
+
     const config = {
       method: "post",
       url: `${url}/post`,
@@ -104,15 +113,15 @@ function CreatePost() {
   };
 
   const addFiles = (e) => {
-    const imageLists = e.target.files;
-    let imageUrlLists = [...files];
+    e.preventDefault();
+    const img = e.target.files;
 
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
-    }
+    const tempArr = [...imgs, img];
 
-    setFiles(imageUrlLists);
+    setImg(tempArr);
+    const prevFile = URL.createObjectURL(e.target.files[0]);
+    setFiles([...files, prevFile]);
+    e.target.value = "";
   };
   const deleteFile = (id) => {
     setFiles(files.filter((_, index) => index !== id));
@@ -184,17 +193,21 @@ function CreatePost() {
         </div>
         <div className="formBox">
           <div>사진</div>
-          <input type="file" multiple onChange={addFiles}></input>
+          <input type="file" onChange={addFiles}></input>
         </div>
         {files[0] ? (
           <Carousel variant="dark">
             {files.map((img, i) => {
               if (img)
                 return (
-                  <Carousel.Item>
-                    <Carousel.Caption style={{}}>
+                  <Carousel.Item id={`item${i}`} style={{ width: "700px", height: "400px", background: "white" }}>
+                    <Carousel.Caption>
                       <button
-                        style={{ position: "relative", border: "1px solid black", background: "white" }}
+                        style={{
+                          position: "relative",
+                          border: "1px solid black",
+                          background: "white",
+                        }}
                         type="button"
                         onClick={() => {
                           deleteFile(i);
@@ -203,7 +216,7 @@ function CreatePost() {
                         사진 삭제
                       </button>
                     </Carousel.Caption>
-                    <img className="d-block w-100" src={img} />
+                    <img style={{ height: "100%", objectFit: "contain" }} className="d-block w-100" src={img} />
                   </Carousel.Item>
                 );
             })}

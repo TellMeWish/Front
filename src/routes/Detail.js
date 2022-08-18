@@ -86,6 +86,9 @@ function Detail() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const getItem = async () => {
     const config = {
       method: "get",
