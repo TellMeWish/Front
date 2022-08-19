@@ -52,12 +52,28 @@ let Post = styled.div`
   }
   cursor: grab;
 `;
+let Progress = styled.div`
+  width: 100%;
+  height: 30px;
+  background-color: #dedede;
+  font-weight: 600;
+  font-size: 0.8rem;
+  & div {
+    height: 30px;
+    padding: 0;
+    text-align: center;
+    background-color: #4f98ff;
+    color: #111;
+  }
+`;
 function Profile() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [list, setList] = useState(1);
   const [items, setItems] = useState([]);
+  const [likeItems, setLikeItems] = useState([]);
   const [progress, setProgress] = useState("");
+  const [achivement, setAchivement] = useState(0);
 
   useEffect(() => {
     getMyPost();
@@ -66,6 +82,14 @@ function Profile() {
   useEffect(() => {
     if (document.getElementById("inline-radio-1")) document.getElementById("inline-radio-1").checked = true;
   }, [list]);
+
+  useEffect(() => {
+    let count = 0;
+    items.map((i) => {
+      if (i.isProgress == 2) count += 1;
+    });
+    setAchivement(count / items.length);
+  }, [items]);
 
   const handleChange = (e) => {
     setProgress(e.target.value);
@@ -96,7 +120,6 @@ function Profile() {
       setItems([...arr]);
     });
   };
-
   const getMyLikedPost = () => {
     const config = {
       method: "get",
@@ -108,7 +131,7 @@ function Profile() {
     };
     axios(config).then((res) => {
       let arr = res.data.postList;
-      setItems([...arr]);
+      setLikeItems([...arr]);
     });
     console.log(items);
   };
@@ -119,6 +142,10 @@ function Profile() {
           <div>ooo의 프로필</div>
           <div style={{ fontSize: "10px", marginLeft: "10px" }}>프로필 수정</div>
         </div>
+        <div>버킷리스트 달성률 {(achivement * 100).toFixed(2)}%</div>
+        <Progress>
+          <div style={{ width: achivement * 1 * 100 + "%" }}></div>
+        </Progress>
       </ProfileCard>
       <div style={{ marginTop: "30px" }}>
         <ListBtn
@@ -199,7 +226,7 @@ function Profile() {
           <div>
             <div>좋아요</div>
             <div className="postList">
-              {items.map((item, i) => {
+              {likeItems.map((item, i) => {
                 return (
                   <Post
                     onClick={() => {

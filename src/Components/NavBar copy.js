@@ -83,15 +83,17 @@ function NavBar() {
               버킷리스트 목록
             </Menu>
             <Menu>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="/postList/여행/">여행</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/운동/">운동</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/공부/">공부</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/음식/">음식</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/취미/">취미</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/갖고싶은것/">갖고싶은것</NavDropdown.Item>
-                <NavDropdown.Item href="/postList/기타/">기타</NavDropdown.Item>
-              </NavDropdown>
+              <div>
+                <NavDropdown title="카테고리" id="navbarScrollingDropdown">
+                  <NavDropdown.Item href="/postList/여행/">여행</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/운동/">운동</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/공부/">공부</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/음식/">음식</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/취미/">취미</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/갖고싶은것/">갖고싶은것</NavDropdown.Item>
+                  <NavDropdown.Item href="/postList/기타/">기타</NavDropdown.Item>
+                </NavDropdown>
+              </div>
             </Menu>
             <Menu
               onClick={() => {
