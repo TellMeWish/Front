@@ -27,6 +27,7 @@ function Login() {
         navigate("/");
         localStorage.clear();
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("username", res.data.username);
         console.log(localStorage.getItem("token"));
         console.log(res);
       })

@@ -88,7 +88,7 @@ function Profile() {
     items.map((i) => {
       if (i.isProgress == 2) count += 1;
     });
-    setAchivement(count / items.length);
+    if (count != 0) setAchivement(count / items.length);
   }, [items]);
 
   const handleChange = (e) => {

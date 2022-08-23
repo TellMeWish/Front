@@ -9,7 +9,7 @@ let Post = styled.div`
   width: 350px;
   height: 400px;
   padding: 20px;
-  background: var(--color-light-green);
+  background: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -175,11 +175,17 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                {item.photoId ? <img src={thumbnail.find((e) => e.id === item.photoId)?.url} /> : <img src="/img/noimage.png" />}
                 <div className="textBox">
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div className="postTitle">제목 : {item.title}</div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", marginBottom: "15px" }}>
+                    <div className="postTitle">{item.title}</div>
                   </div>
+                  {item.photoId ? (
+                    <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                  ) : (
+                    <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                      {item.content}
+                    </div>
+                  )}
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : <div style={{ height: "19.5px" }}></div>}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>
@@ -203,11 +209,17 @@ function PostList() {
                   navigate(`/detail/${item.id}`);
                 }}
               >
-                {item.photoId ? <img src={thumbnail.find((e) => e.id === item.photoId)?.url} /> : <img src="/img/noimage.png" />}
                 <div className="textBox">
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div className="postTitle">제목 : {item.title}</div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", marginBottom: "15px" }}>
+                    <div className="postTitle">{item.title}</div>
                   </div>
+                  {item.photoId ? (
+                    <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                  ) : (
+                    <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                      {item.content}
+                    </div>
+                  )}
                   {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : <div style={{ height: "19.5px" }}></div>}
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>

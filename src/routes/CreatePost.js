@@ -12,7 +12,8 @@ import Carousel from "react-bootstrap/Carousel";
 import Map from "../Components/Map";
 let Button = styled.button`
   border: none;
-  background: var(--color-light-green);
+  background: var(--color-beige);
+  color: white;
   width: 330px;
   height: 50px;
 `;
@@ -101,7 +102,7 @@ function CreatePost() {
 
     await axios(config)
       .then((res) => {
-        console.log(files);
+        console.log(res);
         alert("등록 완료");
         navigate("/postList");
       })
@@ -114,11 +115,12 @@ function CreatePost() {
 
   const addFiles = (e) => {
     e.preventDefault();
-    const img = e.target.files;
+    const img = e.target.files[0];
 
     const tempArr = [...imgs, img];
 
     setImg(tempArr);
+    console.log(imgs);
     const prevFile = URL.createObjectURL(e.target.files[0]);
     setFiles([...files, prevFile]);
     e.target.value = "";

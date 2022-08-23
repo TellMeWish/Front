@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 let Card = styled.div`
-  height: 100vh;
+  height: 90vh;
   background: ${(props) => props.bg};
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ function Home() {
   return (
     //버킷리스트 목록, 카테고리, 프로필, 지도, 검색창, 로그인/회원가입
     <div>
-      <Card>
+      <Card bg="var(--color-skin)">
         <img></img>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
           <span>내 버킷 리스트를</span>
@@ -39,7 +39,7 @@ function Home() {
           <span>공유해보세요</span>
         </div>
       </Card>
-      <Card bg="var(--color-skin)">
+      <Card>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-start" }}>
           <span>내 삶의 목표를</span>
           <span>소원을말해봐와</span>
@@ -47,7 +47,7 @@ function Home() {
         </div>
         <img></img>
       </Card>
-      <Card>
+      <Card bg="var(--color-skin)">
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <Btn
             style={{ marginBottom: "48px" }}

@@ -68,7 +68,7 @@ function NavBar() {
                 navigate(`/postList/${category}/${keyword}`);
                 window.location.reload();
               }}
-              style={{ width: "75px", height: "40px", border: "none", background: "var(--color-light-green)", marginLeft: "10px" }}
+              style={{ width: "75px", height: "40px", border: "none", background: "var(--color-beige)", color: "white", marginLeft: "10px" }}
             >
               검색
             </button>

@@ -24,7 +24,6 @@
   font-family: none;
 }
 .container {
-  height: 700px;
   display: flex;
   justify-content: center;
   align-items: center;
