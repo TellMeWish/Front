@@ -28,6 +28,8 @@ function Login() {
         localStorage.clear();
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("username", res.data.username);
+        localStorage.setItem("nickname", res.data.nickname);
+        localStorage.setItem("id", res.data.id);
         console.log(localStorage.getItem("token"));
         console.log(res);
       })

@@ -6,8 +6,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 let ListBtn = styled.button`
   width: 150px;
-  border: 1px solid black;
-  background: var(--color-green);
+  border: 1px solid var(--color-beige);
+  color: white;
+  background: var(--color-beige);
   height: 50px;
   font-size: 14px;
   &.disabled {
@@ -37,7 +38,7 @@ let Post = styled.div`
   width: 350px;
   height: 400px;
   padding: 20px;
-  background: var(--color-light-green);
+  background: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,12 +69,14 @@ let Progress = styled.div`
 `;
 function Profile() {
   const token = localStorage.getItem("token");
+  const nickname = localStorage.getItem("nickname");
   const navigate = useNavigate();
   const [list, setList] = useState(1);
   const [items, setItems] = useState([]);
   const [likeItems, setLikeItems] = useState([]);
   const [progress, setProgress] = useState("");
   const [achivement, setAchivement] = useState(0);
+  const [thumbnail, setThumbnail] = useState([]);
 
   useEffect(() => {
     getMyPost();
@@ -118,6 +121,22 @@ function Profile() {
     axios(config).then((res) => {
       let arr = res.data.postList;
       setItems([...arr]);
+      res.data.postList.map((post) => {
+        if (post.photoId) {
+          const config = {
+            method: "get",
+            url: `${url}/photo/${post.photoId}`,
+            responseType: "blob",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          };
+          axios(config).then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
+            setThumbnail((prevState) => [...prevState, { url: url, id: post.photoId }]);
+          });
+        }
+      });
     });
   };
   const getMyLikedPost = () => {
@@ -138,8 +157,8 @@ function Profile() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <ProfileCard>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div>ooo의 프로필</div>
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "30px" }}>
+          <div>{nickname}의 프로필</div>
           <div style={{ fontSize: "10px", marginLeft: "10px" }}>프로필 수정</div>
         </div>
         <div>버킷리스트 달성률 {(achivement * 100).toFixed(2)}%</div>
@@ -173,7 +192,7 @@ function Profile() {
           좋아요 목록
         </ListBtn>
       </div>
-      <PostList>
+      <PostList style={{ background: "var(--color-skin)" }}>
         {list ? (
           <div>
             <Form>
@@ -196,7 +215,13 @@ function Profile() {
                         navigate(`/detail/${item.id}`);
                       }}
                     >
-                      <img src="/img/noimage.png"></img>
+                      {item.photoId ? (
+                        <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                      ) : (
+                        <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                          {item.content}
+                        </div>
+                      )}
                       <div className="textBox">
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <div className="postTitle">제목 : {item.title}</div>
@@ -233,7 +258,13 @@ function Profile() {
                       navigate(`/detail/${item.id}`);
                     }}
                   >
-                    <img src="/img/noimage.png"></img>
+                    {item.photoId ? (
+                      <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                    ) : (
+                      <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                        {item.content}
+                      </div>
+                    )}
                     <div className="textBox">
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <div className="postTitle">제목 : {item.title}</div>

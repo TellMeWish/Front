@@ -42,7 +42,8 @@ let CommentForm = styled.form`
 let Btn = styled.button`
   width: 90px;
   color: #fff;
-  background: var(--color-green);
+  background: var(--color-beige);
+  border: none;
   margin-top: 10px;
   height: 30px;
 `;
@@ -82,9 +83,11 @@ function Detail() {
   const [reply, setReply] = useState("");
   const [secret, setSecret] = useState(0);
   const [show, setShow] = useState(false);
+  const [files, setFiles] = useState([]);
 
   const [photo, setPhoto] = useState([]);
   const progress = ["진행 전", "진행 중", "진행 완료"];
+  const setProgress = ["진행하기", "완료하기"];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -210,6 +213,64 @@ function Detail() {
       getItem();
     });
   };
+
+  const doProgress = async () => {
+    var FormData = require("form-data");
+    var data = new FormData();
+    var files = [];
+    if (post.photoIdList[0]) {
+      post.photoIdList.map(async (id) => {
+        const config = {
+          method: "get",
+          url: `${url}/photo/${id}`,
+          responseType: "blob",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+        await axios(config)
+          .then((res) => {
+            const blob = new Blob([res.data], { type: res.headers["content-type"] });
+            files = [...temp, new File([blob], "image.png", { type: blob.type })];
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    }
+
+    let postContent = {
+      title: post.title,
+      isPrivate: post.isPrivate,
+      isParticipate: post.isParticipate,
+      category: post.category,
+      content: post.content,
+      location: {
+        longitude: post.lng,
+        latitude: post.lat,
+      },
+      isProgress: 1,
+    };
+    data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
+    console.log(data.get("img"));
+    const config = {
+      method: "post",
+      url: `${url}/post`,
+      data: data,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    await axios(config)
+      .then((res) => {
+        alert("버킷리스트를 진행합니다.");
+        // window.location.reload();
+        setFiles([]);
+      })
+      .catch(() => {
+        alert("실패");
+      });
+  };
   const showInput = (i) => {
     document.getElementById(i).style.display = "inline-block";
     document.getElementById(`postReply${i}`).style.display = "inline-block";
@@ -293,6 +354,13 @@ function Detail() {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div className="postCategory">
                 카테고리 : {post.category} | 상태 : {progress[post.isProgress]}
+                {post.isProgress == 0 ? <button onClick={doProgress}>진행하기</button> : null}
+                {post.isProgress == 1 ? (
+                  <div>
+                    <button>완료하기</button>
+                    <button>진행취소</button>{" "}
+                  </div>
+                ) : null}
               </div>
               {post?.location?.latitude ? (
                 <Button variant="primary" onClick={handleShow}>

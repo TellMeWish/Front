@@ -8,6 +8,7 @@ import PostList from "./routes/PostList";
 import Detail from "./routes/Detail";
 import Profile from "./routes/Profile";
 import UpdatePost from "./routes/UpdatePost";
+import MapSearch from "./routes/MapSearch";
 import axios from "axios";
 import "./css/App.css";
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/updatePost/:id" element={<UpdatePost />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/mapSearch" element={<MapSearch />} />
       </Routes>
     </div>
   );

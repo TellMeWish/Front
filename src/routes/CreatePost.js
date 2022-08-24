@@ -88,6 +88,7 @@ function CreatePost() {
     imgs.map((img) => {
       data.append("img", img);
     });
+    console.log(data.get("img"));
 
     // data.append("review", new Blob([JSON.stringify(content)], { type: "application/json" }));
 
@@ -116,6 +117,7 @@ function CreatePost() {
   const addFiles = (e) => {
     e.preventDefault();
     const img = e.target.files[0];
+    console.log(img);
 
     const tempArr = [...imgs, img];
 
