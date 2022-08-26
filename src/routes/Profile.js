@@ -159,7 +159,6 @@ function Profile() {
       <ProfileCard>
         <div style={{ display: "flex", alignItems: "center", marginBottom: "30px" }}>
           <div>{nickname}의 프로필</div>
-          <div style={{ fontSize: "10px", marginLeft: "10px" }}>프로필 수정</div>
         </div>
         <div>버킷리스트 달성률 {(achivement * 100).toFixed(2)}%</div>
         <Progress>

@@ -17,6 +17,13 @@ let PostContentBox = styled.div`
   width: 500px;
   height: 500px;
 `;
+let Tag = styled.span`
+  background: ${(prop) => prop.bg};
+  border-radius: 5px;
+  padding: 5px;
+  maring-right: 5px;
+  color: white;
+`;
 
 let Postimg = styled.img`
   width: 500px;
@@ -40,7 +47,6 @@ let CommentForm = styled.form`
   }
 `;
 let Btn = styled.button`
-  width: 90px;
   color: #fff;
   background: var(--color-beige);
   border: none;
@@ -87,7 +93,6 @@ function Detail() {
 
   const [photo, setPhoto] = useState([]);
   const progress = ["진행 전", "진행 중", "진행 완료"];
-  const setProgress = ["진행하기", "완료하기"];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -104,12 +109,31 @@ function Detail() {
     };
     await axios(config)
       .then((res) => {
+        console.log(res.data.post);
         setPost(res.data.post);
         setComments([...res.data.post.commentList]);
         if (res.data.post.photoIdList[0] && !photo[0]) {
           getPhoto(res.data.post.photoIdList);
         }
-        console.log(res);
+        if (res.data.post.photoIdList[0])
+          res.data.post.photoIdList.map(async (id) => {
+            const config = {
+              method: "get",
+              url: `${url}/photo/${id}`,
+              responseType: "blob",
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            };
+            await axios(config)
+              .then((res) => {
+                const blob = new Blob([res.data], { type: res.headers["content-type"] });
+                setFiles((files) => [...files, new File([blob], `image${id}.png`, { type: blob.type })]);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -127,7 +151,7 @@ function Detail() {
       };
       await axios(config).then((res) => {
         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
-        setPhoto((currentArray) => [url, ...currentArray]);
+        setPhoto((currentArray) => [...currentArray, url]);
       });
     });
   };
@@ -214,30 +238,15 @@ function Detail() {
     });
   };
 
-  const doProgress = async () => {
-    var FormData = require("form-data");
-    var data = new FormData();
-    var files = [];
-    if (post.photoIdList[0]) {
-      post.photoIdList.map(async (id) => {
-        const config = {
-          method: "get",
-          url: `${url}/photo/${id}`,
-          responseType: "blob",
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
-        await axios(config)
-          .then((res) => {
-            const blob = new Blob([res.data], { type: res.headers["content-type"] });
-            files = [...temp, new File([blob], "image.png", { type: blob.type })];
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    }
+  const setProgress = async (num) => {
+    let progressNum = num + 1;
+    if (num == 2) progressNum = 0;
+    let FormData = require("form-data");
+    let data = new FormData();
+    console.log(files);
+    files.map((file) => {
+      data.append("img", file);
+    });
 
     let postContent = {
       title: post.title,
@@ -249,22 +258,21 @@ function Detail() {
         longitude: post.lng,
         latitude: post.lat,
       },
-      isProgress: 1,
+      isProgress: progressNum,
     };
     data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
     console.log(data.get("img"));
     const config = {
-      method: "post",
-      url: `${url}/post`,
+      method: "put",
+      url: `${url}/post/${id}`,
       data: data,
       headers: {
         Authorization: "Bearer " + token,
       },
     };
     await axios(config)
-      .then((res) => {
-        alert("버킷리스트를 진행합니다.");
-        // window.location.reload();
+      .then(() => {
+        getItem();
         setFiles([]);
       })
       .catch(() => {
@@ -350,17 +358,23 @@ function Detail() {
         <PostContentBox>
           <div style={{ borderBottom: "2px solid black", paddingBottom: "10px" }}>
             <div style={{ width: "500px", height: "75px", fontSize: "50px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: " nowrap" }}>{post.title}</div>
-            <div style={{ fontSize: "12px", marginBottom: "15px" }}>작성자 : {post?.post_user_id?.nickname}</div>
+            <div style={{ fontSize: "12px", marginBottom: "15px" }}>
+              {" "}
+              {post?.post_user_id?.nickname} | {new Date(post.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div className="postCategory">
-                카테고리 : {post.category} | 상태 : {progress[post.isProgress]}
-                {post.isProgress == 0 ? <button onClick={doProgress}>진행하기</button> : null}
-                {post.isProgress == 1 ? (
-                  <div>
-                    <button>완료하기</button>
-                    <button>진행취소</button>{" "}
-                  </div>
-                ) : null}
+              <div className="postCategory" style={{ width: "300px" }}>
+                <Tag bg="var(--color-beige)">{post.category}</Tag>{" "}
+                <Tag
+                  bg="var(--color-green)"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setProgress(post.isProgress);
+                  }}
+                >
+                  {progress[post.isProgress]}
+                </Tag>{" "}
+                {post.isParticipate ? post.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
               </div>
               {post?.location?.latitude ? (
                 <Button variant="primary" onClick={handleShow}>
@@ -396,20 +410,21 @@ function Detail() {
             )}
             {post.isMyPost ? (
               <div>
-                <button
+                <Btn
+                  style={{ marginRight: "5px" }}
                   onClick={() => {
                     navigate(`/updatePost/${id}`);
                   }}
                 >
                   수정
-                </button>
-                <button
+                </Btn>
+                <Btn
                   onClick={() => {
                     deletePost();
                   }}
                 >
                   삭제
-                </button>
+                </Btn>
               </div>
             ) : null}
           </div>

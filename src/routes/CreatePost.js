@@ -77,6 +77,7 @@ function CreatePost() {
       isPrivate: isPrivate,
       isParticipate: isParticipate,
       category: category,
+      isCompleted: 1,
       content: content,
       location: {
         longitude: lng,

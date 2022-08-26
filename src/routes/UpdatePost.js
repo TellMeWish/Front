@@ -27,6 +27,7 @@ function UpdatePost() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isProgress, setIsProgress] = useState(0);
 
   const [showMap, setShowMap] = useState(0);
   const [files, setFiles] = useState([]);
@@ -76,11 +77,12 @@ function UpdatePost() {
     setImg(tempArr);
     console.log(imgs);
     const prevFile = URL.createObjectURL(e.target.files[0]);
-    setFiles([...files, prevFile]);
+    setFiles((files) => [...files, prevFile]);
     e.target.value = "";
   };
   const deleteFile = (id) => {
     setFiles(files.filter((_, index) => index !== id));
+    setImg(imgs.filter((_, index) => index !== id));
     console.log("delete");
   };
   useEffect(() => {
@@ -104,7 +106,29 @@ function UpdatePost() {
         setIsParticipate(post.isParticipate);
         setLng(post.location?.longitude);
         setLat(post.location?.latitude);
+        setIsProgress(post.isProgress);
         setCenter({ lat: post.location?.latitude, lng: post.location?.longitude });
+        if (post.photoIdList[0]) {
+          post.photoIdList.map(async (id) => {
+            const config = {
+              method: "get",
+              url: `${url}/photo/${id}`,
+              responseType: "blob",
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            };
+            await axios(config)
+              .then((res) => {
+                const blob = new Blob([res.data], { type: res.headers["content-type"] });
+                setImg((img) => [...img, new File([blob], `image${id}.png`, { type: blob.type })]);
+                setFiles((files) => [...files, window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }))]);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        }
         console.log(post);
       });
   }, []);
@@ -120,6 +144,7 @@ function UpdatePost() {
       isParticipate: isParticipate,
       category: category,
       content: content,
+      isPorgress: isProgress,
       location: {
         longitude: lng,
         latitude: lat,
