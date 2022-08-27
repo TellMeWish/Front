@@ -71,9 +71,8 @@ function Profile() {
   const token = localStorage.getItem("token");
   const nickname = localStorage.getItem("nickname");
   const navigate = useNavigate();
-  const [list, setList] = useState(1);
+  const [list, setList] = useState(0);
   const [items, setItems] = useState([]);
-  const [likeItems, setLikeItems] = useState([]);
   const [progress, setProgress] = useState("");
   const [achivement, setAchivement] = useState(0);
   const [thumbnail, setThumbnail] = useState([]);
@@ -139,6 +138,36 @@ function Profile() {
       });
     });
   };
+  const getCommentPost = () => {
+    const config = {
+      method: "get",
+      url: `${url}/post/myCommentedPostList`,
+
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then((res) => {
+      let arr = res.data.postList;
+      setItems([...arr]);
+      res.data.postList.map((post) => {
+        if (post.photoId) {
+          const config = {
+            method: "get",
+            url: `${url}/photo/${post.photoId}`,
+            responseType: "blob",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          };
+          axios(config).then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
+            setThumbnail((prevState) => [...prevState, { url: url, id: post.photoId }]);
+          });
+        }
+      });
+    });
+  };
   const getMyLikedPost = () => {
     const config = {
       method: "get",
@@ -150,9 +179,24 @@ function Profile() {
     };
     axios(config).then((res) => {
       let arr = res.data.postList;
-      setLikeItems([...arr]);
+      setItems([...arr]);
+      res.data.postList.map((post) => {
+        if (post.photoId) {
+          const config = {
+            method: "get",
+            url: `${url}/photo/${post.photoId}`,
+            responseType: "blob",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          };
+          axios(config).then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }));
+            setThumbnail((prevState) => [...prevState, { url: url, id: post.photoId }]);
+          });
+        }
+      });
     });
-    console.log(items);
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -172,7 +216,8 @@ function Profile() {
           onClick={() => {
             document.getElementById("mybucket").classList.add("disabled");
             document.getElementById("likebucket").classList.remove("disabled");
-            setList(1);
+            document.getElementById("didComment").classList.remove("disabled");
+            setList(0);
             getMyPost();
           }}
         >
@@ -182,17 +227,31 @@ function Profile() {
           id="likebucket"
           onClick={() => {
             document.getElementById("mybucket").classList.remove("disabled");
+            document.getElementById("didComment").classList.remove("disabled");
             document.getElementById("likebucket").classList.add("disabled");
-            setList(0);
+            setList(1);
             getMyLikedPost();
             console.log(items);
           }}
         >
           좋아요 목록
         </ListBtn>
+        <ListBtn
+          id="didComment"
+          onClick={() => {
+            document.getElementById("mybucket").classList.remove("disabled");
+            document.getElementById("likebucket").classList.remove("disabled");
+            document.getElementById("didComment").classList.add("disabled");
+            setList(2);
+            getCommentPost();
+            console.log(items);
+          }}
+        >
+          내가 댓글 단 게시글
+        </ListBtn>
       </div>
       <PostList style={{ background: "var(--color-skin)" }}>
-        {list ? (
+        {list == 0 && (
           <div>
             <Form>
               {["radio"].map((type) => (
@@ -246,11 +305,56 @@ function Profile() {
               })}
             </div>
           </div>
-        ) : (
+        )}
+        {list == 1 && (
           <div>
             <div>좋아요</div>
             <div className="postList">
-              {likeItems.map((item, i) => {
+              {items.map((item, i) => {
+                return (
+                  <Post
+                    onClick={() => {
+                      navigate(`/detail/${item.id}`);
+                    }}
+                  >
+                    {item.photoId ? (
+                      <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                    ) : (
+                      <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+                        {item.content}
+                      </div>
+                    )}
+                    <div className="textBox">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div className="postTitle">제목 : {item.title}</div>
+                      </div>
+                      {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
+                      <div style={{ display: "flex", marginTop: "50px" }}>
+                        <div>
+                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                        </div>
+                        <div style={{ marginLeft: "10px" }}>
+                          <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
+                        </div>
+                        <div style={{ marginLeft: "10px" }}>
+                          <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
+                        </div>
+                      </div>
+                      <div style={{ marginTop: "5px" }}>
+                        <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
+                      </div>
+                    </div>
+                  </Post>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {list == 2 && (
+          <div>
+            <div>댓글 단 목록</div>
+            <div className="postList">
+              {items.map((item, i) => {
                 return (
                   <Post
                     onClick={() => {

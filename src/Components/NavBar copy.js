@@ -25,7 +25,6 @@ let Select = styled.select`
 function NavBar() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const [showcategory, setshowCategory] = useState(0);
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
   return (
@@ -75,7 +74,7 @@ function NavBar() {
           <div style={{ display: "flex", fontSize: "13px" }}>
             <Menu
               onClick={() => {
-                token ? navigate("/postList") : navigate("/login");
+                navigate("/postList");
               }}
             >
               버킷리스트 목록

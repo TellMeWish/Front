@@ -9,6 +9,7 @@
   flex-direction: column;
   font-family: "1009", serif;
   align-items: center;
+  margin: 100px 0;
 }
 .container {
   margin-top: 150px;

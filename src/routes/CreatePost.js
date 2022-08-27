@@ -64,7 +64,9 @@ function CreatePost() {
       setLng(places[0].geometry.location.lng());
     }
   }, [places]);
-
+  useEffect(() => {
+    !token && navigate("/login");
+  }, []);
   const submitPost = async (event) => {
     event.preventDefault();
 

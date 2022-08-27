@@ -9,6 +9,7 @@
   flex-direction: column;
   font-family: "1009", serif;
   align-items: center;
+  margin-top: 100px;
 }
 .loginBox div {
   font-size: 40px;

@@ -5,8 +5,11 @@ import Marker from "../Components/Marker";
 import Searchbar from "../Components/Searchbar";
 import React, { useEffect, useState } from "react";
 import { key } from "../Key";
+import { useNavigate } from "react-router-dom";
 
 function MapSearch() {
+  let navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const [places, setPlaces] = useState([]);
   const [target, setTarget] = useState(0);
   const [apiReady, setApiReady] = useState(false);
@@ -32,6 +35,9 @@ function MapSearch() {
   const mouseOut = (key) => {
     setTarget(0);
   };
+  useEffect(() => {
+    !token && navigate("/login");
+  }, []);
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>

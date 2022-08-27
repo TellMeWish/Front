@@ -98,6 +98,7 @@ function Detail() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    !token && navigate("/login");
   }, []);
   const getItem = async () => {
     const config = {
