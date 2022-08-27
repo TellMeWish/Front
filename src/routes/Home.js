@@ -24,6 +24,7 @@ let Btn = styled.button`
 `;
 
 function Home() {
+  const token = localStorage.getItem("token");
   let navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,14 +53,14 @@ function Home() {
           <Btn
             style={{ marginBottom: "48px" }}
             onClick={() => {
-              navigate("/createPost");
+              token ? navigate("/createPost") : navigate("/login");
             }}
           >
             버킷리스트 등록
           </Btn>
           <Btn
             onClick={() => {
-              navigate("/postList");
+              token ? navigate("/postList") : navigate("/login");
             }}
           >
             목록 보기

@@ -9,7 +9,6 @@ import Marker from "../Components/Marker";
 import Searchbar from "../Components/Searchbar";
 import { key } from "../Key";
 import Carousel from "react-bootstrap/Carousel";
-import Map from "../Components/Map";
 let Button = styled.button`
   border: none;
   background: var(--color-beige);

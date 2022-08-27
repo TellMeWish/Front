@@ -369,7 +369,7 @@ function Detail() {
                   bg="var(--color-green)"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    setProgress(post.isProgress);
+                    if (post.isMyPost) setProgress(post.isProgress);
                   }}
                 >
                   {progress[post.isProgress]}

@@ -29,7 +29,7 @@ function NavBar() {
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
   return (
-    <div className="nav_bar">
+    <div className="nav_bar" style={{ zIndex: "5" }}>
       <Menu
         onClick={() => {
           navigate("/");
@@ -66,7 +66,6 @@ function NavBar() {
             <button
               onClick={() => {
                 navigate(`/postList/${category}/${keyword}`);
-                window.location.reload();
               }}
               style={{ width: "75px", height: "40px", border: "none", background: "var(--color-beige)", color: "white", marginLeft: "10px" }}
             >
@@ -76,8 +75,7 @@ function NavBar() {
           <div style={{ display: "flex", fontSize: "13px" }}>
             <Menu
               onClick={() => {
-                navigate("/postList");
-                window.location.reload();
+                token ? navigate("/postList") : navigate("/login");
               }}
             >
               버킷리스트 목록
@@ -101,6 +99,13 @@ function NavBar() {
               }}
             >
               버킷리스트 등록
+            </Menu>
+            <Menu
+              onClick={() => {
+                navigate("/mapSearch");
+              }}
+            >
+              지도 검색
             </Menu>
           </div>
         </div>

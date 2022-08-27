@@ -68,6 +68,7 @@ function UpdatePost() {
       setLng(places[0].geometry.location.lng());
     }
   }, [places]);
+
   const addFiles = (e) => {
     e.preventDefault();
     const img = e.target.files[0];
@@ -75,7 +76,6 @@ function UpdatePost() {
     const tempArr = [...imgs, img];
 
     setImg(tempArr);
-    console.log(imgs);
     const prevFile = URL.createObjectURL(e.target.files[0]);
     setFiles((files) => [...files, prevFile]);
     e.target.value = "";
@@ -83,7 +83,6 @@ function UpdatePost() {
   const deleteFile = (id) => {
     setFiles(files.filter((_, index) => index !== id));
     setImg(imgs.filter((_, index) => index !== id));
-    console.log("delete");
   };
   useEffect(() => {
     axios
@@ -132,19 +131,17 @@ function UpdatePost() {
         console.log(post);
       });
   }, []);
-
   const submitPost = async (event) => {
     event.preventDefault();
     var FormData = require("form-data");
     var data = new FormData();
-
     let postContent = {
       title: title,
       isPrivate: isPrivate,
       isParticipate: isParticipate,
       category: category,
       content: content,
-      isPorgress: isProgress,
+      isProgress: isProgress,
       location: {
         longitude: lng,
         latitude: lat,
@@ -176,7 +173,7 @@ function UpdatePost() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
-      <form className="createForm" onSubmit={submitPost}>
+      <form id="createForm" onSubmit={submitPost}>
         <div className="checkList">
           <div className="checkList">
             <div style={{ marginRight: "20px" }}>
@@ -273,14 +270,14 @@ function UpdatePost() {
           </Carousel>
         ) : null}
         {showMap ? (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "30px" }}>
             <div>장소 </div>
             <div>
               {apiReady && googlemaps && <Searchbar map={map} mapApi={googlemaps} addPlace={addPlace} />}
               <div style={{ width: "600px", height: "400px" }} className="googleMap">
                 <GoogleMap
                   bootstrapURLKeys={{ key: key, libraries: "places" }}
-                  defaultZoom={13}
+                  defaultZoom={18}
                   defaultCenter={center}
                   yesIWantToUseGoogleMapApiInternals
                   onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
@@ -291,7 +288,7 @@ function UpdatePost() {
                 >
                   {places.length !== 0 &&
                     places.map((place) => {
-                      console.log(place.geometry.location.lat(), place.geometry.location.lng());
+                      console.log(place.geometry.location.lng(), place.geometry.location.lat());
                       return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
                     })}
                   <Marker place={center} />
