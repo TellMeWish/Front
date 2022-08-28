@@ -253,8 +253,9 @@ function PostList() {
                       {item.content}
                     </div>
                   )}
-                  {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
                   <Tag bg="var(--color-green)">{item.category}</Tag>
+                  {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
+
                   <div style={{ display: "flex", marginTop: "50px" }}>
                     <div>
                       <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}

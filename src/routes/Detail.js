@@ -313,6 +313,7 @@ function Detail() {
     await axios(config)
       .then(() => {
         getItem();
+        console.log(files);
         setFiles([]);
       })
       .catch(() => {

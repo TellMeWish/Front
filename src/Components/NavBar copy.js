@@ -56,6 +56,7 @@ function NavBar() {
               <option value="갖고싶은것">갖고싶은것</option>
             </Select>
             <input
+              placeholder="여행, 운동, 취미 등"
               onChange={(e) => {
                 setKeyword(e.target.value);
               }}

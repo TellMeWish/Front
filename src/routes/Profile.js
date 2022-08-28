@@ -18,7 +18,7 @@ let ListBtn = styled.button`
 let ProfileCard = styled.div`
   margin-top: 30px;
   width: 800px;
-  height: 300px;
+  height: 200px;
   padding: 30px;
   border: 1px solid black;
   border-radius: 30px;
@@ -202,7 +202,7 @@ function Profile() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <ProfileCard>
         <div style={{ display: "flex", alignItems: "center", marginBottom: "30px" }}>
-          <div>{nickname}의 프로필</div>
+          <div style={{ fontSize: "25px" }}>{nickname}</div>
         </div>
         <div>버킷리스트 달성률 {(achivement * 100).toFixed(2)}%</div>
         <Progress>

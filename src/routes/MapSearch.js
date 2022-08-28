@@ -2,6 +2,8 @@ import Map from "../Components/Map";
 import SearchBox from "../Components/SearchBox2";
 import GoogleMap from "google-map-react";
 import Marker from "../Components/Marker";
+import axios from "axios";
+import { url } from "../Url";
 import Searchbar from "../Components/Searchbar";
 import React, { useEffect, useState } from "react";
 import { key } from "../Key";
@@ -16,6 +18,7 @@ function MapSearch() {
   const [map, setMap] = useState(null);
   const [googlemaps, setGooglemaps] = useState(null);
   const [center, setCenter] = useState({ lat: 35.18952, lng: 129.0715 });
+  const [markers, setMarkers] = useState([]);
 
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
@@ -38,6 +41,20 @@ function MapSearch() {
   useEffect(() => {
     !token && navigate("/login");
   }, []);
+  useEffect(() => {
+    if (places[0]) {
+      const config = {
+        method: "get",
+        url: `${url}/post/locations?lat=${places[0].geometry.location.lat()}&lng=${places[0].geometry.location.lng()}`,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      axios(config).then((res) => {
+        setMarkers([...res.data.postList]);
+      });
+    }
+  }, [places]);
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -58,7 +75,13 @@ function MapSearch() {
           onClick={() => {
             mouseOut();
           }}
-        ></GoogleMap>
+        >
+          {markers[0] &&
+            markers.map((marker) => {
+              console.log(marker);
+              return <Marker lat={marker.location.latitude} lng={marker.location.longitude} />;
+            })}
+        </GoogleMap>
       </div>
     </div>
   );

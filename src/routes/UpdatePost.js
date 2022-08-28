@@ -120,6 +120,7 @@ function UpdatePost() {
             await axios(config)
               .then((res) => {
                 const blob = new Blob([res.data], { type: res.headers["content-type"] });
+                console.log(1);
                 setImg((img) => [...img, new File([blob], `image${id}.png`, { type: blob.type })]);
                 setFiles((files) => [...files, window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }))]);
               })
@@ -163,6 +164,7 @@ function UpdatePost() {
     await axios(config)
       .then((res) => {
         console.log(res);
+        console.log(imgs);
         alert("수정 완료");
         navigate("/postList");
       })
