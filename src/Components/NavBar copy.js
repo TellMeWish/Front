@@ -60,11 +60,11 @@ function NavBar() {
                 setKeyword(e.target.value);
               }}
               style={{ width: "500px", height: "40px", marginBottom: "20px", paddingLeft: "90px" }}
-              placeholder="ooo 여행"
             ></input>
             <button
               onClick={() => {
                 navigate(`/postList/${category}/${keyword}`);
+                window.location.reload();
               }}
               style={{ width: "75px", height: "40px", border: "none", background: "var(--color-beige)", color: "white", marginLeft: "10px" }}
             >

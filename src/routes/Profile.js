@@ -111,7 +111,7 @@ function Profile() {
   const getMyPost = () => {
     const config = {
       method: "get",
-      url: `${url}/post/myPostList`,
+      url: `${url}/post/myPostList/share`,
 
       headers: {
         Authorization: "Bearer " + token,

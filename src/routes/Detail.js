@@ -93,6 +93,7 @@ function Detail() {
 
   const [photo, setPhoto] = useState([]);
   const progress = ["진행 전", "진행 중", "진행 완료"];
+  const progressColor = ["var(--color-light-green)", "var(--color-green)", "silver"];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -256,8 +257,8 @@ function Detail() {
       category: post.category,
       content: post.content,
       location: {
-        longitude: post.lng,
-        latitude: post.lat,
+        longitude: post.location.longitude,
+        latitude: post.location.latitude,
       },
       isProgress: progressNum,
     };
@@ -279,6 +280,60 @@ function Detail() {
       .catch(() => {
         alert("실패");
       });
+  };
+  const setComplete = async (num) => {
+    let FormData = require("form-data");
+    let data = new FormData();
+    files.map((file) => {
+      data.append("img", file);
+    });
+
+    let postContent = {
+      title: post.title,
+      isPrivate: post.isPrivate,
+      isParticipate: post.isParticipate,
+      category: post.category,
+      content: post.content,
+      location: {
+        longitude: post.location.longitude,
+        latitude: post.location.latitude,
+      },
+      isProgress: post.isProgress,
+      isCompleted: num,
+    };
+    data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
+    const config = {
+      method: "put",
+      url: `${url}/post/${id}`,
+      data: data,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    await axios(config)
+      .then(() => {
+        getItem();
+        setFiles([]);
+      })
+      .catch(() => {
+        alert("실패");
+      });
+  };
+
+  const sharePost = () => {
+    const config = {
+      method: "post",
+      url: `${url}/post/share`,
+      data: {
+        postId: id,
+      },
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then(() => {
+      alert("공유 완료");
+    });
   };
   const showInput = (i) => {
     document.getElementById(i).style.display = "inline-block";
@@ -367,7 +422,7 @@ function Detail() {
               <div className="postCategory" style={{ width: "300px" }}>
                 <Tag bg="var(--color-beige)">{post.category}</Tag>{" "}
                 <Tag
-                  bg="var(--color-green)"
+                  bg={progressColor[post.isProgress]}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (post.isMyPost) setProgress(post.isProgress);
@@ -375,7 +430,29 @@ function Detail() {
                 >
                   {progress[post.isProgress]}
                 </Tag>{" "}
-                {post.isParticipate ? post.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
+                {post.isParticipate ? (
+                  post.isCompleted ? (
+                    <Tag
+                      onClick={() => {
+                        if (post.isMyPost) setComplete(0);
+                      }}
+                      bg="silver"
+                    >
+                      모집 완료
+                    </Tag>
+                  ) : (
+                    <Tag
+                      onClick={() => {
+                        if (post.isMyPost) setComplete(1);
+                      }}
+                      bg="var(--color-beige)"
+                    >
+                      모집 중
+                    </Tag>
+                  )
+                ) : (
+                  <Tag style={{ height: "19.5px" }}></Tag>
+                )}
               </div>
               {post?.location?.latitude ? (
                 <Button variant="primary" onClick={handleShow}>
@@ -397,6 +474,17 @@ function Detail() {
                   src="/img/like.png"
                 />
                 {post.likeCount}
+                {!post.isMyPost && (
+                  <div style={{ marginLeft: "10px" }}>
+                    <Btn
+                      onClick={() => {
+                        sharePost();
+                      }}
+                    >
+                      공유하기
+                    </Btn>
+                  </div>
+                )}
               </div>
             ) : (
               <div style={{ display: "flex", alignItems: "flex-end" }}>
@@ -407,6 +495,17 @@ function Detail() {
                   src="/img/unlike.png"
                 />
                 {post.likeCount}
+                {!post.isMyPost && (
+                  <div style={{ marginLeft: "10px" }}>
+                    <Btn
+                      onClick={() => {
+                        sharePost();
+                      }}
+                    >
+                      공유하기
+                    </Btn>
+                  </div>
+                )}
               </div>
             )}
             {post.isMyPost ? (

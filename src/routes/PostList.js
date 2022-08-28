@@ -80,6 +80,8 @@ function PostList() {
       window.removeEventListener("scroll", handleFollow);
     };
   });
+
+  //댓글 수 계산 함수
   const getCommentSize = (post) => {
     let size = 0;
     post?.commentList?.map((item) => {
@@ -91,6 +93,7 @@ function PostList() {
     return size;
   };
 
+  //게시글 목록 요청 함수
   const getItems = useCallback(async () => {
     let config = {};
     let data = new FormData();
@@ -188,7 +191,7 @@ function PostList() {
                     <div className="postTitle">{item.title}</div>
                   </div>
                   {item.photoId ? (
-                    <img style={{ marginBottom: "10px" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                    <img style={{ marginBottom: "10px", background: "#fff", objectFit: "contain" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
                   ) : (
                     <div
                       style={{
@@ -233,7 +236,7 @@ function PostList() {
                     <div className="postTitle">{item.title}</div>
                   </div>
                   {item.photoId ? (
-                    <img style={{ marginBottom: "10px" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                    <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "contain" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
                   ) : (
                     <div
                       style={{

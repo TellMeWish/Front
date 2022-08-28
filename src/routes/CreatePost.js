@@ -261,6 +261,8 @@ function CreatePost() {
             onClick={(e) => {
               if (e.target.innerText == "위치정보 추가") {
                 setShowMap(1);
+                setLat(0);
+                setLng(0);
                 e.target.innerText = "위치정보 제거";
               } else {
                 setShowMap(0);
