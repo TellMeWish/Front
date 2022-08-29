@@ -193,27 +193,7 @@ function PostList() {
                   {item.photoId ? (
                     <img style={{ marginBottom: "10px", background: "#fff", objectFit: "contain" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
                   ) : (
-                    <div
-                      style={{
-                        width: "300px",
-                        height: "200px",
-                        marginBottom: "10px",
-                        background: "var(--color-skin)",
-                        padding: "5px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "normal",
-                      }}
-                    >
-                      {item.content?.split("\n").map((line) => {
-                        return (
-                          <span>
-                            {line}
-                            <br />
-                          </span>
-                        );
-                      })}
-                    </div>
+                    <img style={{ marginBottom: "10px", background: "#fff", objectFit: "contain" }} src="/img/noimage.png" />
                   )}
                   {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
                   <div style={{ display: "flex", marginTop: "50px" }}>
@@ -245,27 +225,7 @@ function PostList() {
                   {item.photoId ? (
                     <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "contain" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
                   ) : (
-                    <div
-                      style={{
-                        width: "300px",
-                        height: "200px",
-                        marginBottom: "10px",
-                        background: "var(--color-skin)",
-                        padding: "5px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "normal",
-                      }}
-                    >
-                      {item.content?.split("\n").map((line) => {
-                        return (
-                          <span>
-                            {line}
-                            <br />
-                          </span>
-                        );
-                      })}
-                    </div>
+                    <img style={{ marginBottom: "10px", background: "#fff", objectFit: "contain" }} src="/img/noimage.png" />
                   )}
                   <Tag bg="var(--color-green)">{item.category}</Tag>
                   {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
