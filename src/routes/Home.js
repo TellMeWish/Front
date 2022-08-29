@@ -9,6 +9,7 @@ let Card = styled.div`
   align-items: center;
   padding: 60px;
   justify-content: space-between;
+  background-size: cover;
 `;
 let Btn = styled.button`
   width: 350px;
@@ -32,23 +33,23 @@ function Home() {
   return (
     //버킷리스트 목록, 카테고리, 프로필, 지도, 검색창, 로그인/회원가입
     <div>
-      <Card bg="var(--color-skin)">
+      <Card bg="url(/img/running.jpeg)">
         <img></img>
         <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-end" }}>
-          <span>내 버킷 리스트를</span>
-          <span>사람들에게</span>
-          <span>공유해보세요</span>
+          <span style={{ color: "white" }}>내 버킷 리스트를</span>
+          <span style={{ color: "white" }}>사람들에게</span>
+          <span style={{ color: "white" }}>공유해보세요</span>
         </div>
       </Card>
-      <Card>
-        <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-start" }}>
+      <Card bg="url(/img/view.jpeg)">
+        <div style={{ display: "flex", flexDirection: "column", fontSize: "60px", alignItems: "flex-start", marginBottom: "20px" }}>
           <span>내 삶의 목표를</span>
           <span>소원을말해봐와</span>
           <span>이루어보세요</span>
         </div>
         <img></img>
       </Card>
-      <Card bg="var(--color-skin)">
+      <Card bg="#fff">
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <Btn
             style={{ marginBottom: "48px" }}

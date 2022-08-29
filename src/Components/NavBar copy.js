@@ -76,6 +76,7 @@ function NavBar() {
             <Menu
               onClick={() => {
                 navigate("/postList");
+                window.location.reload();
               }}
             >
               버킷리스트 목록

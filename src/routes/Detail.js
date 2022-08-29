@@ -434,6 +434,7 @@ function Detail() {
                 {post.isParticipate ? (
                   post.isCompleted ? (
                     <Tag
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         if (post.isMyPost) setComplete(0);
                       }}
@@ -443,6 +444,7 @@ function Detail() {
                     </Tag>
                   ) : (
                     <Tag
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         if (post.isMyPost) setComplete(1);
                       }}

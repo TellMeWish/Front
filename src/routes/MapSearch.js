@@ -38,8 +38,10 @@ function MapSearch() {
   const mouseOut = (key) => {
     setTarget(0);
   };
+
   useEffect(() => {
     !token && navigate("/login");
+    window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
     if (places[0]) {
@@ -57,7 +59,7 @@ function MapSearch() {
   }, [places]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "200px" }}>
       <div style={{ width: "1000px", height: "600px" }} className="googleMap">
         {apiReady && googlemaps && (
           <div className="searchBar">
