@@ -463,7 +463,14 @@ function Detail() {
             </div>
           </div>
           <div className="postContent" style={{ height: "300px", marginTop: "10px" }}>
-            {post.content}
+            {post.content?.split("\n").map((line) => {
+              return (
+                <span>
+                  {line}
+                  <br />
+                </span>
+              );
+            })}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             {post.isLike ? (

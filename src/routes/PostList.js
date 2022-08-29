@@ -205,7 +205,14 @@ function PostList() {
                         whiteSpace: "normal",
                       }}
                     >
-                      {item.content}
+                      {item.content?.split("\n").map((line) => {
+                        return (
+                          <span>
+                            {line}
+                            <br />
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
                   {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
@@ -250,7 +257,14 @@ function PostList() {
                         whiteSpace: "normal",
                       }}
                     >
-                      {item.content}
+                      {item.content?.split("\n").map((line) => {
+                        return (
+                          <span>
+                            {line}
+                            <br />
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
                   <Tag bg="var(--color-green)">{item.category}</Tag>
