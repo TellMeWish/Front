@@ -33,7 +33,7 @@ function MapSearch() {
     }
   };
   const mouseOver = (key) => {
-    setTarget(key);
+    setTarget(key * 1);
   };
   const mouseOut = (key) => {
     setTarget(0);
@@ -78,8 +78,8 @@ function MapSearch() {
         >
           {markers[0] &&
             markers.map((marker) => {
-              console.log(marker);
-              return <Marker lat={marker.location.latitude} lng={marker.location.longitude} />;
+              console.log(marker.id);
+              return <Marker key={marker.id} lat={marker.location.latitude} lng={marker.location.longitude} place={marker} target={marker.id === target}></Marker>;
             })}
         </GoogleMap>
       </div>

@@ -11,10 +11,10 @@ class SearchBox extends React.Component {
 
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport);
-      map.setZoom(15);
+      map.setZoom(14);
     } else {
       map.setCenter(place.geometry.location);
-      map.setZoom(15);
+      map.setZoom(14);
     }
     addPlace(selected);
   };

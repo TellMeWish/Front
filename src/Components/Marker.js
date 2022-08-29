@@ -1,9 +1,11 @@
 import InfoWindow from "./InfoWindow";
 function Marker(props) {
   return (
-    <div style={{ position: "relative", right: "30px", bottom: "30px" }}>
-      {props.target && <InfoWindow place={props.place} />}
-      <img src="/img/marker.png" alt="marker" width="30px" />
+    <div>
+      <div style={{ position: "absolute", bottom: "0px", left: "-20px" }}>
+        <img src="/img/marker.png" alt="marker" width="30px" />
+      </div>
+      {props.target && <InfoWindow post={props.place} />}
     </div>
   );
 }
