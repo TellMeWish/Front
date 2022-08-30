@@ -82,6 +82,8 @@ function Profile() {
   const navigate = useNavigate();
   const [list, setList] = useState(0);
   const [items, setItems] = useState([]);
+  const [likedItems, setLikedItems] = useState([]);
+  const [commentedItems, setCommentedItems] = useState([]);
   const [progress, setProgress] = useState("");
   const [achivement, setAchivement] = useState(0);
   const [thumbnail, setThumbnail] = useState([]);
@@ -158,7 +160,7 @@ function Profile() {
     };
     axios(config).then((res) => {
       let arr = res.data.postList;
-      setItems([...arr]);
+      setCommentedItems([...arr]);
       res.data.postList.map((post) => {
         if (post.photoId) {
           const config = {
@@ -188,7 +190,7 @@ function Profile() {
     };
     axios(config).then((res) => {
       let arr = res.data.postList;
-      setItems([...arr]);
+      setLikedItems([...arr]);
       res.data.postList.map((post) => {
         if (post.photoId) {
           const config = {
@@ -287,29 +289,9 @@ function Profile() {
                           <div className="postTitle">{item.title}</div>
                         </div>
                         {item.photoId ? (
-                          <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "contain" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                          <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "cover" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
                         ) : (
-                          <div
-                            style={{
-                              width: "300px",
-                              height: "200px",
-                              marginBottom: "10px",
-                              background: "var(--color-skin)",
-                              padding: "5px",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "normal",
-                            }}
-                          >
-                            {item.content?.split("\n").map((line) => {
-                              return (
-                                <span>
-                                  {line}
-                                  <br />
-                                </span>
-                              );
-                            })}
-                          </div>
+                          <img style={{ marginBottom: "10px", background: "#fff", objectFit: "cover" }} src="/img/noimage.png" />
                         )}
                         <Tag bg="var(--color-green)">{item.category}</Tag>
                         {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
@@ -339,28 +321,28 @@ function Profile() {
           <div>
             <div>좋아요</div>
             <div className="postList">
-              {items.map((item, i) => {
+              {likedItems.map((item, i) => {
                 return (
                   <Post
                     onClick={() => {
                       navigate(`/detail/${item.id}`);
                     }}
                   >
-                    {item.photoId ? (
-                      <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
-                    ) : (
-                      <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
-                        {item.content}
-                      </div>
-                    )}
                     <div className="textBox">
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div className="postTitle">제목 : {item.title}</div>
+                      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", marginBottom: "15px" }}>
+                        <div className="postTitle">{item.title}</div>
                       </div>
-                      {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
+                      {item.photoId ? (
+                        <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "cover" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                      ) : (
+                        <img style={{ marginBottom: "10px", background: "#fff", objectFit: "cover" }} src="/img/noimage.png" />
+                      )}
+                      <Tag bg="var(--color-green)">{item.category}</Tag>
+                      {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
+
                       <div style={{ display: "flex", marginTop: "50px" }}>
                         <div>
-                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}
                         </div>
                         <div style={{ marginLeft: "10px" }}>
                           <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
@@ -369,7 +351,7 @@ function Profile() {
                           <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
                         </div>
                       </div>
-                      <div style={{ marginTop: "5px" }}>
+                      <div style={{ marginTop: "5px", color: "gray" }}>
                         <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
                       </div>
                     </div>
@@ -383,28 +365,28 @@ function Profile() {
           <div>
             <div>댓글 단 목록</div>
             <div className="postList">
-              {items.map((item, i) => {
+              {commentedItems.map((item, i) => {
                 return (
                   <Post
                     onClick={() => {
                       navigate(`/detail/${item.id}`);
                     }}
                   >
-                    {item.photoId ? (
-                      <img src={thumbnail.find((e) => e.id === item.photoId)?.url} />
-                    ) : (
-                      <div style={{ width: "300px", height: "200px", background: "var(--color-skin)", padding: "5px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
-                        {item.content}
-                      </div>
-                    )}
                     <div className="textBox">
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div className="postTitle">제목 : {item.title}</div>
+                      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", marginBottom: "15px" }}>
+                        <div className="postTitle">{item.title}</div>
                       </div>
-                      {item.isParticipate ? item.isCompleted ? <div>(모집 완료)</div> : <div>(모집 중)</div> : null}
+                      {item.photoId ? (
+                        <img style={{ marginBottom: "10px", background: "var(--color-skin)", objectFit: "cover" }} src={thumbnail.find((e) => e.id === item.photoId)?.url} />
+                      ) : (
+                        <img style={{ marginBottom: "10px", background: "#fff", objectFit: "cover" }} src="/img/noimage.png" />
+                      )}
+                      <Tag bg="var(--color-green)">{item.category}</Tag>
+                      {item.isParticipate ? item.isCompleted ? <Tag bg="gray">모집 완료</Tag> : <Tag bg="var(--color-beige)">모집 중</Tag> : <Tag style={{ height: "19.5px" }}></Tag>}
+
                       <div style={{ display: "flex", marginTop: "50px" }}>
                         <div>
-                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/like.png" /> {item.likeCount}
+                          <img style={{ width: "15px", height: "15px", position: "relative", bottom: "3px" }} src="/img/unlike.png" /> {item.likeCount}
                         </div>
                         <div style={{ marginLeft: "10px" }}>
                           <img style={{ width: "15px", height: "15px" }} src="/img/view.png" /> {item.viewCount}
@@ -413,7 +395,7 @@ function Profile() {
                           <img style={{ width: "15px", height: "15px" }} src="/img/comment.png" /> {getCommentSize(item)}
                         </div>
                       </div>
-                      <div style={{ marginTop: "5px" }}>
+                      <div style={{ marginTop: "5px", color: "gray" }}>
                         <img style={{ width: "15px", height: "15px" }} src="/img/clock.png" /> {new Date(item.createdAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}
                       </div>
                     </div>
