@@ -592,11 +592,16 @@ function Detail() {
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "950px", marginBottom: "30px" }}>
                       <div style={{ fontSize: "16px", display: "flex", flexDirection: "column" }}>
-                        <div>
-                          {comment.secret && <AiOutlineLock />}
-                          {comment.user.nickname}
+                        {comment.user.nickname}
+                        <div style={{ fontSize: "12px", color: "grey", marginTop: "5px" }}>
+                          {comment.secret ? (
+                            <div>
+                              <AiOutlineLock /> 비밀 {comment.createdAt}
+                            </div>
+                          ) : (
+                            <div>{comment.createdAt}</div>
+                          )}
                         </div>
-                        <div style={{ fontSize: "10px", marginTop: "5px" }}>{comment.createdAt}</div>
                       </div>
                       <div class="btns">
                         {comment.user.username == username ? (
@@ -653,7 +658,7 @@ function Detail() {
                       </div>
                       {comment.secret && !post.isMyPost && comment.user?.username != username ? (
                         <div>
-                          <div style={{ fontSize: "20px", fontWeight: "400" }} id={"content" + i}>
+                          <div style={{ fontSize: "20px", fontWeight: "400", color: "grey" }} id={"content" + i}>
                             비밀댓글입니다.
                           </div>
                         </div>

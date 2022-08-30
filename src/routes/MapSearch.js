@@ -80,7 +80,6 @@ function MapSearch() {
         >
           {markers[0] &&
             markers.map((marker) => {
-              console.log(marker.id);
               return <Marker key={marker.id} lat={marker.location.latitude} lng={marker.location.longitude} place={marker} target={marker.id === target}></Marker>;
             })}
         </GoogleMap>
