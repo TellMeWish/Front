@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { AiOutlineLock } from "@react-icons/all-files/ai/AiOutlineLock";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { url } from "../Url";
@@ -223,7 +224,6 @@ function Detail() {
     const data = {
       content: reply,
       postId: id,
-      secret: true,
       parentId: pid,
     };
     const config = {
@@ -362,12 +362,14 @@ function Detail() {
     document.getElementById(`replyContent${i}`).style.display = "none";
     document.getElementById(`updateReplyInput${i}`).style.display = "inline-block";
     document.getElementById(`putReply${i}`).style.display = "inline-block";
+    document.getElementById(`deleteReply${i}`).style.display = "none";
     document.getElementById(`updateReply${i}`).innerText = "닫기";
   };
   const closeUpdateReply = (i) => {
     document.getElementById(`replyContent${i}`).style.display = "inline-block";
     document.getElementById(`updateReplyInput${i}`).style.display = "none";
     document.getElementById(`putReply${i}`).style.display = "none";
+    document.getElementById(`deleteReply${i}`).style.display = "inline-block";
     document.getElementById(`updateReply${i}`).innerText = "수정";
   };
   const showReply = (i) => {
@@ -383,10 +385,13 @@ function Detail() {
   const updateComment = (id) => {
     const data = {
       content: update,
-      secret: true,
     };
     axios
-      .put(`${url}/comment/${id}`, data)
+      .put(`${url}/comment/${id}`, data, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then(() => {
         getItem();
       })
@@ -587,7 +592,10 @@ function Detail() {
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "950px", marginBottom: "30px" }}>
                       <div style={{ fontSize: "16px", display: "flex", flexDirection: "column" }}>
-                        {comment.user.nickname}
+                        <div>
+                          {comment.secret && <AiOutlineLock />}
+                          {comment.user.nickname}
+                        </div>
                         <div style={{ fontSize: "10px", marginTop: "5px" }}>{comment.createdAt}</div>
                       </div>
                       <div class="btns">
@@ -664,7 +672,14 @@ function Detail() {
                             >
                               +답글
                             </span>
-                            <span>({comment.commentList.length})</span>
+                            <span
+                              style={{ cursor: "pointer" }}
+                              onClick={(e) => {
+                                e.target.parentNode.children[0].innerText == "+답글" ? showReply(i) : closeReply(i);
+                              }}
+                            >
+                              ({comment.commentList.length})
+                            </span>
                             <span
                               style={{ display: "none", marginLeft: "30px", cursor: "pointer" }}
                               id={"reply" + i}
@@ -677,7 +692,7 @@ function Detail() {
                           </div>
                           <textarea
                             id={i}
-                            style={{ display: "none", width: "1000px", height: "100px", cursor: "pointer" }}
+                            style={{ display: "none", width: "1000px", height: "100px" }}
                             onChange={(e) => {
                               setReply(e.target.value);
                             }}
@@ -690,7 +705,7 @@ function Detail() {
                               closeInput(i);
                             }}
                           >
-                            답글달기버튼
+                            작성
                           </div>
                         </div>
                       )}
@@ -707,23 +722,23 @@ function Detail() {
                             {com.user.nickname}
                             <div className="btns">
                               <div
-                                id={`updateReply${index}`}
-                                onClick={(e) => {
-                                  e.target.innerText == "수정" ? showUpdateReply(i) : closeUpdateReply(i);
+                                id={`putReply${index}`}
+                                style={{ display: "none", cursor: "pointer" }}
+                                onClick={() => {
+                                  updateComment(com.id, index);
+                                  closeUpdateReply(index);
                                 }}
-                                style={{ cursor: "pointer" }}
                               >
                                 수정
                               </div>
                               <div
-                                id={`putReply${index}`}
-                                style={{ display: "none", cursor: "pointer" }}
-                                onClick={() => {
-                                  updateComment(com.id, i);
-                                  closeUpdateReply(i);
+                                id={`updateReply${index}`}
+                                onClick={(e) => {
+                                  e.target.innerText == "수정" ? showUpdateReply(index) : closeUpdateReply(index);
                                 }}
+                                style={{ cursor: "pointer" }}
                               >
-                                수정버튼
+                                수정
                               </div>
                               <div
                                 onClick={() => {
@@ -738,6 +753,7 @@ function Detail() {
                                     });
                                 }}
                                 style={{ cursor: "pointer" }}
+                                id={`deleteReply${index}`}
                               >
                                 삭제
                               </div>
