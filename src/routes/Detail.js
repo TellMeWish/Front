@@ -281,6 +281,47 @@ function Detail() {
         alert("실패");
       });
   };
+  const setMyProgress = async (num) => {
+    let progressNum = num + 1;
+    if (num == 2) progressNum = 0;
+    let FormData = require("form-data");
+    let data = new FormData();
+    console.log(files);
+    files.map((file) => {
+      data.append("img", file);
+    });
+
+    let postContent = {
+      title: post.title,
+      isPrivate: post.isPrivate,
+      isParticipate: post.isParticipate,
+      category: post.category,
+      content: post.content,
+      location: {
+        longitude: post.location.longitude,
+        latitude: post.location.latitude,
+      },
+      myProgress: progressNum,
+    };
+    data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
+    console.log(data.get("img"));
+    const config = {
+      method: "put",
+      url: `${url}/post/${id}`,
+      data: data,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    await axios(config)
+      .then(() => {
+        getItem();
+        setFiles([]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const setComplete = async (num) => {
     let FormData = require("form-data");
     let data = new FormData();
@@ -334,10 +375,28 @@ function Detail() {
     };
     axios(config).then(() => {
       alert("공유 완료");
+      getItem();
+    });
+  };
+  const cancelShare = () => {
+    const config = {
+      method: "delete",
+      url: `${url}/post/share/delete`,
+      data: {
+        postId: id,
+      },
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    axios(config).then(() => {
+      alert("공유 취소");
+      getItem();
     });
   };
   const showInput = (i) => {
     document.getElementById(i).style.display = "inline-block";
+    document.getElementById(i).value = "";
     document.getElementById(`postReply${i}`).style.display = "inline-block";
     document.getElementById(`reply${i}`).innerText = "닫기";
   };
@@ -427,16 +486,28 @@ function Detail() {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div className="postCategory" style={{ width: "300px" }}>
                 <Tag bg="var(--color-beige)">{post.category}</Tag>{" "}
-                <Tag
-                  bg={progressColor[post.isProgress]}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (post.isMyPost) setProgress(post.isProgress);
-                  }}
-                >
-                  {progress[post.isProgress]}
-                </Tag>{" "}
-                {post.isParticipate ? (
+                {post.isShare ? (
+                  <Tag
+                    bg={progressColor[post.myProgress]}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setMyProgress(post.myProgress);
+                    }}
+                  >
+                    {progress[post.myProgress]}
+                  </Tag>
+                ) : (
+                  <Tag
+                    bg={progressColor[post.isProgress]}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (post.isMyPost) setProgress(post.isProgress);
+                    }}
+                  >
+                    {progress[post.isProgress]}
+                  </Tag>
+                )}{" "}
+                {post.isParticipate && !post.isShare ? (
                   post.isCompleted ? (
                     <Tag
                       style={{ cursor: "pointer" }}
@@ -489,7 +560,7 @@ function Detail() {
                   src="/img/like.png"
                 />
                 {post.likeCount}
-                {!post.isMyPost && (
+                {!post.isMyPost && !post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
                     <Btn
                       onClick={() => {
@@ -497,6 +568,16 @@ function Detail() {
                       }}
                     >
                       공유하기
+                    </Btn>
+                  </div>
+                ) : (
+                  <div style={{ marginLeft: "10px" }}>
+                    <Btn
+                      onClick={() => {
+                        cancelShare();
+                      }}
+                    >
+                      공유 취소
                     </Btn>
                   </div>
                 )}
@@ -510,7 +591,7 @@ function Detail() {
                   src="/img/unlike.png"
                 />
                 {post.likeCount}
-                {!post.isMyPost && (
+                {!post.isMyPost && !post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
                     <Btn
                       onClick={() => {
@@ -518,6 +599,16 @@ function Detail() {
                       }}
                     >
                       공유하기
+                    </Btn>
+                  </div>
+                ) : (
+                  <div style={{ marginLeft: "10px" }}>
+                    <Btn
+                      onClick={() => {
+                        cancelShare();
+                      }}
+                    >
+                      공유 취소
                     </Btn>
                   </div>
                 )}
@@ -721,8 +812,8 @@ function Detail() {
                 <div style={{ display: "none", flexDirection: "column-reverse" }} id={`replyComment${i}`}>
                   {comment.commentList.map((com, index) => {
                     return (
-                      <div style={{ width: "1000px" }}>
-                        <Comment style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", marginBottom: "20px", background: "#F8F9FA" }}>
+                      <div style={{ width: "1000px", display: "flex", justifyContent: "flex-end" }}>
+                        <Comment style={{ width: "900px", display: "flex", flexDirection: "column", justifyContent: "space-between", marginBottom: "20px" }}>
                           <div style={{ fontSize: "16px", display: "flex", justifyContent: "space-between" }}>
                             {com.user.nickname}
                             <div className="btns">
