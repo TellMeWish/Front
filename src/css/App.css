@@ -18,6 +18,12 @@
 body {
   margin-top: 150px;
 }
+.animation {
+  transition: all 0.5s ease;
+}
+.animation:hover {
+  transform: scale(1.2);
+}
 .nav_bar {
   width: 100vw;
   height: 150px;

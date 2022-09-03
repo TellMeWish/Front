@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { AiOutlineLock } from "@react-icons/all-files/ai/AiOutlineLock";
+import { FaRegShareSquare } from "@react-icons/all-files/fa/FaRegShareSquare";
+import { FaShareSquare } from "@react-icons/all-files/fa/FaShareSquare";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { url } from "../Url";
@@ -72,11 +74,7 @@ let Like = styled.img`
   width: 30px;
   height: 30px;
   cursor: pointer;
-  transition: all 0.5s ease;
   margin-right: 10px;
-  &:hover {
-    transform: scale(1.2);
-  }
 `;
 function Detail() {
   const navigate = useNavigate();
@@ -284,31 +282,15 @@ function Detail() {
   const setMyProgress = async (num) => {
     let progressNum = num + 1;
     if (num == 2) progressNum = 0;
-    let FormData = require("form-data");
-    let data = new FormData();
-    console.log(files);
-    files.map((file) => {
-      data.append("img", file);
-    });
 
     let postContent = {
-      title: post.title,
-      isPrivate: post.isPrivate,
-      isParticipate: post.isParticipate,
-      category: post.category,
-      content: post.content,
-      location: {
-        longitude: post.location.longitude,
-        latitude: post.location.latitude,
-      },
-      myProgress: progressNum,
+      postId: id,
+      progress: progressNum,
     };
-    data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
-    console.log(data.get("img"));
     const config = {
       method: "put",
-      url: `${url}/post/${id}`,
-      data: data,
+      url: `${url}/post/share`,
+      data: postContent,
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -554,6 +536,7 @@ function Detail() {
             {post.isLike ? (
               <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <Like
+                  className="animation"
                   onClick={() => {
                     likePost();
                   }}
@@ -562,29 +545,30 @@ function Detail() {
                 {post.likeCount}
                 {!post.isMyPost && !post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
-                    <Btn
+                    <FaRegShareSquare
+                      className="animation"
+                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
                       onClick={() => {
                         sharePost();
                       }}
-                    >
-                      공유하기
-                    </Btn>
+                    />
                   </div>
                 ) : (
                   <div style={{ marginLeft: "10px" }}>
-                    <Btn
+                    <FaShareSquare
+                      className="animation"
+                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
                       onClick={() => {
                         cancelShare();
                       }}
-                    >
-                      공유 취소
-                    </Btn>
+                    />
                   </div>
                 )}
               </div>
             ) : (
               <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <Like
+                  className="animation"
                   onClick={() => {
                     likePost();
                   }}

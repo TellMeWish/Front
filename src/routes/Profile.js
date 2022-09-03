@@ -79,6 +79,7 @@ let Progress = styled.div`
 function Profile() {
   const token = localStorage.getItem("token");
   const nickname = localStorage.getItem("nickname");
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
   const [list, setList] = useState(0);
   const [items, setItems] = useState([]);
@@ -99,7 +100,7 @@ function Profile() {
   useEffect(() => {
     let count = 0;
     items.map((i) => {
-      if (i.isProgress == 2) count += 1;
+      if ((i.isProgress == 2 && i.post_user_id.username == username) || i.myProgress == 2) count += 1;
     });
     if (count != 0) setAchivement(count / items.length);
   }, [items]);
