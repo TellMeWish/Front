@@ -88,7 +88,7 @@ function Profile() {
   const [progress, setProgress] = useState("");
   const [achivement, setAchivement] = useState(0);
   const [thumbnail, setThumbnail] = useState([]);
-
+  const [favorite, setFavorite] = useState("");
   useEffect(() => {
     getMyPost();
   }, []);
@@ -103,6 +103,22 @@ function Profile() {
       if ((i.isProgress == 2 && i.post_user_id.username == username) || i.myProgress == 2) count += 1;
     });
     if (count != 0) setAchivement(count / items.length);
+    let countCategory = [
+      { category: "여행", count: 0 },
+      { category: "운동", count: 0 },
+      { category: "공부", count: 0 },
+      { category: "음식", count: 0 },
+      { category: "취미", count: 0 },
+      { category: "갖고싶은것", count: 0 },
+    ];
+    items.map((i) => {
+      countCategory[countCategory.findIndex((e) => e.category == i.category)].count += 1;
+    });
+    console.log(countCategory);
+    const favCategory = countCategory.reduce((prev, current) => {
+      return prev.count >= current.count ? prev : current;
+    });
+    setFavorite(favCategory.category);
   }, [items]);
 
   const handleChange = (e) => {
@@ -214,7 +230,25 @@ function Profile() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <ProfileCard>
         <div style={{ display: "flex", alignItems: "center", marginBottom: "30px" }}>
-          <div style={{ fontSize: "25px" }}>{nickname}</div>
+          {items[0] ? (
+            <span>
+              <span style={{ fontSize: "25px" }}>{nickname} </span>
+              님의 메인 카테고리는{" "}
+              <span
+                style={{ color: "var(--color-green)", cursor: "pointer", fontSize: "25px" }}
+                onClick={() => {
+                  navigate(`/postList/${favorite}/`);
+                }}
+              >
+                {favorite}
+              </span>{" "}
+              입니다.
+            </span>
+          ) : (
+            <span>
+              <span style={{ fontSize: "25px" }}>{nickname} </span>님의 버킷리스트를 작성해보세요
+            </span>
+          )}
         </div>
         <div>버킷리스트 달성률 {(achivement * 100).toFixed(2)}%</div>
         <Progress>
@@ -275,7 +309,7 @@ function Profile() {
                 </div>
               ))}
             </Form>
-            <div>버킷리스트 목록</div>
+            <div>버킷리스트 목록 ({items.length})</div>
             <div className="postList">
               {items?.map((item, i) => {
                 if (!progress || item.isProgress == progress)

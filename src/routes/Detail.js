@@ -577,23 +577,23 @@ function Detail() {
                 {post.likeCount}
                 {!post.isMyPost && !post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
-                    <Btn
+                    <FaRegShareSquare
+                      className="animation"
+                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
                       onClick={() => {
                         sharePost();
                       }}
-                    >
-                      공유하기
-                    </Btn>
+                    />
                   </div>
                 ) : (
                   <div style={{ marginLeft: "10px" }}>
-                    <Btn
+                    <FaShareSquare
+                      className="animation"
+                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
                       onClick={() => {
                         cancelShare();
                       }}
-                    >
-                      공유 취소
-                    </Btn>
+                    />
                   </div>
                 )}
               </div>
