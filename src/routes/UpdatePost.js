@@ -64,6 +64,7 @@ function UpdatePost() {
   };
   useEffect(() => {
     if (places[0]) {
+      setCenter({});
       setLat(places[0].geometry.location.lat());
       setLng(places[0].geometry.location.lng());
     }
@@ -107,6 +108,7 @@ function UpdatePost() {
         setLat(post.location?.latitude);
         setIsProgress(post.isProgress);
         setCenter({ lat: post.location?.latitude, lng: post.location?.longitude });
+        console.log(center);
         if (post.photoIdList[0]) {
           post.photoIdList.map(async (id) => {
             const config = {
@@ -293,7 +295,7 @@ function UpdatePost() {
                       console.log(place.geometry.location.lng(), place.geometry.location.lat());
                       return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
                     })}
-                  <Marker place={center} />
+                  <Marker lat={center.lat} lng={center.lng} />
                 </GoogleMap>
               </div>
             </div>

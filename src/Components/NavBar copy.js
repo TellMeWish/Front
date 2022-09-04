@@ -27,6 +27,12 @@ function NavBar() {
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
+  const handleEnterPress = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/postList/${category}/${keyword}`);
+      window.location.reload();
+    }
+  };
   return (
     <div className="nav_bar" style={{ zIndex: "5" }}>
       <Menu
@@ -60,9 +66,11 @@ function NavBar() {
               onChange={(e) => {
                 setKeyword(e.target.value);
               }}
+              onKeyPress={handleEnterPress}
               style={{ width: "500px", height: "40px", marginBottom: "20px", paddingLeft: "90px" }}
             ></input>
             <button
+              id="searchBtn"
               onClick={() => {
                 navigate(`/postList/${category}/${keyword}`);
                 window.location.reload();
