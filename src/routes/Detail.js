@@ -86,6 +86,7 @@ function Detail() {
   const [comments, setComments] = useState([]);
   const [update, setUpdate] = useState("");
   const [reply, setReply] = useState("");
+  const [replySecret, setReplySecret] = useState("");
   const [secret, setSecret] = useState(0);
   const [show, setShow] = useState(false);
   const [files, setFiles] = useState([]);
@@ -223,6 +224,7 @@ function Detail() {
       content: reply,
       postId: id,
       parentId: pid,
+      secret: replySecret,
     };
     const config = {
       method: "post",
@@ -380,11 +382,14 @@ function Detail() {
     document.getElementById(i).style.display = "inline-block";
     document.getElementById(i).value = "";
     document.getElementById(`postReply${i}`).style.display = "inline-block";
+    document.getElementById(`check${i}`).style.display = "inline-block";
     document.getElementById(`reply${i}`).innerText = "닫기";
+    document.getElementById(`check${i}`).children[0].checked = 0;
   };
   const closeInput = (i) => {
     document.getElementById(i).style.display = "none";
     document.getElementById(`postReply${i}`).style.display = "none";
+    document.getElementById(`check${i}`).style.display = "none";
     document.getElementById(`reply${i}`).innerText = "답글달기";
   };
   const showUpdate = (i) => {
@@ -422,6 +427,7 @@ function Detail() {
     document.getElementById(`replyComment${i}`).style.display = "none";
     document.getElementById(`reply${i}`).style.display = "none";
     document.getElementById(`showReply${i}`).innerText = "+답글";
+    closeInput(i);
   };
   const updateComment = (id) => {
     const data = {
@@ -575,7 +581,7 @@ function Detail() {
                   src="/img/unlike.png"
                 />
                 {post.likeCount}
-                {!post.isMyPost && !post.isShare ? (
+                {!post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
                     <FaRegShareSquare
                       className="animation"
@@ -760,8 +766,18 @@ function Detail() {
                             >
                               ({comment.commentList.length})
                             </span>
+                            <span id={"check" + i} style={{ display: "none", marginLeft: "20px" }}>
+                              <input
+                                type="checkbox"
+                                onChange={(e) => {
+                                  e.target.checked ? setReplySecret(1) : setReplySecret(0);
+                                }}
+                                style={{ position: "relative", top: "2px", marginRight: "2px" }}
+                              />
+                              비밀 댓글
+                            </span>
                             <span
-                              style={{ display: "none", marginLeft: "30px", cursor: "pointer" }}
+                              style={{ display: "none", marginLeft: "10px", cursor: "pointer" }}
                               id={"reply" + i}
                               onClick={(e) => {
                                 e.target.innerText == "답글달기" ? showInput(i) : closeInput(i);
@@ -839,10 +855,23 @@ function Detail() {
                               </div>
                             </div>
                           </div>
-                          <div style={{ fontSize: "10px", marginTop: "5px" }}>{com.createdAt}</div>
-                          <div style={{ fontSize: "20px", margin: "20px 0" }} id={`replyContent${index}`}>
-                            {com.content}
-                          </div>
+
+                          {com.secret ? (
+                            <div style={{ fontSize: "10px", marginTop: "5px", color: "grey" }}>
+                              <AiOutlineLock /> 비밀 {com.createdAt}
+                            </div>
+                          ) : (
+                            <div style={{ fontSize: "10px", marginTop: "5px" }}>{com.createdAt}</div>
+                          )}
+                          {com.secret ? (
+                            <div style={{ fontSize: "20px", margin: "20px 0", color: "grey" }} id={`replyContent${index}`}>
+                              비밀댓글입니다.
+                            </div>
+                          ) : (
+                            <div style={{ fontSize: "20px", margin: "20px 0" }} id={`replyContent${index}`}>
+                              {com.content}
+                            </div>
+                          )}
                           <div>
                             <input
                               id={`updateReplyInput${index}`}

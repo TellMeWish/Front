@@ -40,10 +40,6 @@ function MapSearch() {
   };
 
   useEffect(() => {
-    !token && navigate("/login");
-    window.scrollTo(0, 0);
-  }, []);
-  useEffect(() => {
     if (places[0]) {
       const config = {
         method: "get",
