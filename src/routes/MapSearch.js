@@ -29,36 +29,10 @@ function MapSearch() {
   const [apiReady, setApiReady] = useState(false);
   const [map, setMap] = useState(null);
   const [googlemaps, setGooglemaps] = useState(null);
-  const [center, setCenter] = useState({});
+  const [center, setCenter] = useState({ lat: 35.18952, lng: 129.0715 });
   const [markers, setMarkers] = useState([]);
   const [showmap, setShowmap] = useState(0);
 
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      // GPS를 지원하면
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          center.lat = position.coords.latitude;
-          center.lng = position.coords.longitude;
-          setShowmap(1);
-        },
-        function (error) {
-          console.error(error);
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 0,
-          timeout: Infinity,
-        }
-      );
-    } else {
-      alert("GPS를 지원하지 않습니다");
-      return;
-    }
-  };
-  useEffect(() => {
-    getLocation();
-  }, []);
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
       setApiReady(true);
@@ -102,28 +76,22 @@ function MapSearch() {
             <SearchBox map={map} mapApi={googlemaps} addPlace={addPlace} />
           </div>
         )}
-        {showmap ? (
-          <GoogleMap
-            bootstrapURLKeys={{ key: key, libraries: "places" }}
-            defaultZoom={15}
-            defaultCenter={center}
-            yesIWantToUseGoogleMapApiInternals
-            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-            onChildClick={mouseOver}
-            onClick={() => {
-              mouseOut();
-            }}
-          >
-            {markers[0] &&
-              markers.map((marker) => {
-                return <Marker key={marker.id} lat={marker.location.latitude} lng={marker.location.longitude} place={marker} target={marker.id === target}></Marker>;
-              })}
-          </GoogleMap>
-        ) : (
-          <div style={{ height: "600px", display: "flex", justifyContent: "center", alignItems: "center", background: "" }}>
-            <Loading />
-          </div>
-        )}
+        <GoogleMap
+          bootstrapURLKeys={{ key: key, libraries: "places" }}
+          defaultZoom={0}
+          defaultCenter={center}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          onChildClick={mouseOver}
+          onClick={() => {
+            mouseOut();
+          }}
+        >
+          {markers[0] &&
+            markers.map((marker) => {
+              return <Marker key={marker.id} lat={marker.location.latitude} lng={marker.location.longitude} place={marker} target={marker.id === target}></Marker>;
+            })}
+        </GoogleMap>
       </div>
     </div>
   );
