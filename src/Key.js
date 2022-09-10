@@ -1,1 +1,1 @@
-export const key = "AIzaSyDCBjeH0DJimzDUQ8FhT6S4wi59Q92apaY";
+export const key = process.env.REACT_APP_GOOGLE_API_KEY;

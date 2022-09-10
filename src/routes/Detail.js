@@ -111,7 +111,6 @@ function Detail() {
     };
     await axios(config)
       .then((res) => {
-        console.log(res.data.post);
         setPost(res.data.post);
         setComments([...res.data.post.commentList]);
         if (res.data.post.photoIdList[0] && !photo[0]) {
@@ -200,7 +199,6 @@ function Detail() {
       },
     };
     axios(config).then((res) => {
-      console.log(res);
       getItem();
     });
   };
@@ -235,7 +233,6 @@ function Detail() {
       },
     };
     axios(config).then((res) => {
-      console.log(res);
       getItem();
     });
   };
@@ -245,7 +242,6 @@ function Detail() {
     if (num == 2) progressNum = 0;
     let FormData = require("form-data");
     let data = new FormData();
-    console.log(files);
     files.map((file) => {
       data.append("img", file);
     });
@@ -263,7 +259,6 @@ function Detail() {
       isProgress: progressNum,
     };
     data.append("dto", new Blob([JSON.stringify(postContent)], { type: "application/json" }));
-    console.log(data.get("img"));
     const config = {
       method: "put",
       url: `${url}/post/${id}`,
@@ -338,7 +333,6 @@ function Detail() {
     await axios(config)
       .then(() => {
         getItem();
-        console.log(files);
         setFiles([]);
       })
       .catch(() => {

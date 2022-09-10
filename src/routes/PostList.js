@@ -98,7 +98,6 @@ function PostList() {
     let config = {};
     let data = new FormData();
     if (category || keyword) {
-      console.log(category, keyword);
       data.append("keyword", keyword ?? "");
       data.append("category", category ?? "");
       config = {
@@ -110,7 +109,6 @@ function PostList() {
         },
       };
     } else {
-      console.log("showall");
       config = {
         method: "get",
         url: `${url}/post/postList?page=${page}&size=9`,
@@ -123,7 +121,6 @@ function PostList() {
     setLoading(true);
     await axios(config)
       .then((res) => {
-        console.log(res.data);
         if (!category && !keyword) {
           setItems((prevState) => [...prevState, ...res.data.postList]);
         } else {
@@ -147,7 +144,6 @@ function PostList() {
         });
       })
       .catch((err) => {
-        console.log("실패함");
         console.log(err);
       });
     setLoading(false);

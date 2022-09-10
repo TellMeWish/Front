@@ -1,4 +1,3 @@
-import { post } from "jquery";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 

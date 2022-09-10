@@ -1,26 +1,11 @@
-import Map from "../Components/Map";
-import SearchBox from "../Components/SearchBox2";
+import SearchBox from "../Components/MapSearchBox";
 import GoogleMap from "google-map-react";
 import Marker from "../Components/Marker";
 import axios from "axios";
 import { url } from "../Url";
 import styled from "styled-components";
-import Searchbar from "../Components/Searchbar";
 import React, { useEffect, useState } from "react";
 import { key } from "../Key";
-import { useNavigate } from "react-router-dom";
-let Loading = styled.button`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  background: none;
-  border-top: 2px solid #1d9af2;
-  border-right: 2px solid transparent;
-  border-bottom: none;
-  border-left: none;
-  animation: spinner5 700ms linear infinite;
-  cursor: none;
-`;
 
 function MapSearch() {
   const token = localStorage.getItem("token");

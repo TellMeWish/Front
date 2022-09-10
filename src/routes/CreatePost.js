@@ -90,7 +90,6 @@ function CreatePost() {
     imgs.map((img) => {
       data.append("img", img);
     });
-    console.log(data.get("img"));
 
     // data.append("review", new Blob([JSON.stringify(content)], { type: "application/json" }));
 
@@ -105,13 +104,11 @@ function CreatePost() {
 
     await axios(config)
       .then((res) => {
-        console.log(res);
         alert("등록 완료");
         navigate("/postList");
       })
       .catch((err) => {
         alert("실패");
-        console.log(token);
         console.log(err);
       });
   };
@@ -119,19 +116,16 @@ function CreatePost() {
   const addFiles = (e) => {
     e.preventDefault();
     const img = e.target.files[0];
-    console.log(img);
 
     const tempArr = [...imgs, img];
 
     setImg(tempArr);
-    console.log(imgs);
     const prevFile = URL.createObjectURL(e.target.files[0]);
     setFiles([...files, prevFile]);
     e.target.value = "";
   };
   const deleteFile = (id) => {
     setFiles(files.filter((_, index) => index !== id));
-    console.log("delete");
   };
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
@@ -247,7 +241,6 @@ function CreatePost() {
                 >
                   {places.length !== 0 &&
                     places.map((place) => {
-                      console.log(place.geometry.location.lat(), place.geometry.location.lng());
                       return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
                     })}
                 </GoogleMap>

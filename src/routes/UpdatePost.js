@@ -108,7 +108,6 @@ function UpdatePost() {
         setLat(post.location?.latitude);
         setIsProgress(post.isProgress);
         setCenter({ lat: post.location?.latitude, lng: post.location?.longitude });
-        console.log(center);
         if (post.photoIdList[0]) {
           post.photoIdList.map(async (id) => {
             const config = {
@@ -122,7 +121,6 @@ function UpdatePost() {
             await axios(config)
               .then((res) => {
                 const blob = new Blob([res.data], { type: res.headers["content-type"] });
-                console.log(1);
                 setImg((img) => [...img, new File([blob], `image${id}.png`, { type: blob.type })]);
                 setFiles((files) => [...files, window.URL.createObjectURL(new Blob([res.data], { type: res.headers["content-type"] }))]);
               })
@@ -131,7 +129,6 @@ function UpdatePost() {
               });
           });
         }
-        console.log(post);
       });
   }, []);
   const submitPost = async (event) => {
@@ -165,8 +162,6 @@ function UpdatePost() {
     };
     await axios(config)
       .then((res) => {
-        console.log(res);
-        console.log(imgs);
         alert("수정 완료");
         navigate("/postList");
       })
@@ -181,7 +176,7 @@ function UpdatePost() {
         <div className="checkList">
           <div className="checkList">
             <div style={{ marginRight: "20px" }}>
-              공개 여부{" "}
+              비공개{" "}
               <input
                 id="isPrivate"
                 type="checkbox"
@@ -292,7 +287,6 @@ function UpdatePost() {
                 >
                   {places.length !== 0 &&
                     places.map((place) => {
-                      console.log(place.geometry.location.lng(), place.geometry.location.lat());
                       return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
                     })}
                   <Marker lat={center.lat} lng={center.lng} />

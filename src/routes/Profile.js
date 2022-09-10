@@ -114,7 +114,6 @@ function Profile() {
     items.map((i) => {
       countCategory[countCategory.findIndex((e) => e.category == i.category)].count += 1;
     });
-    console.log(countCategory);
     const favCategory = countCategory.reduce((prev, current) => {
       return prev.count >= current.count ? prev : current;
     });
@@ -277,7 +276,6 @@ function Profile() {
             document.getElementById("likebucket").classList.add("disabled");
             setList(1);
             getMyLikedPost();
-            console.log(items);
           }}
         >
           좋아요 목록
@@ -290,7 +288,6 @@ function Profile() {
             document.getElementById("didComment").classList.add("disabled");
             setList(2);
             getCommentPost();
-            console.log(items);
           }}
         >
           내가 댓글 단 게시글

@@ -1,4 +1,3 @@
-import { propTypes } from "react-bootstrap/esm/Image";
 import SearchBox from "./SearchBox";
 function Searchbar(props) {
   return (

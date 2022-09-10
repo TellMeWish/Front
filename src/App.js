@@ -9,7 +9,6 @@ import Detail from "./routes/Detail";
 import Profile from "./routes/Profile";
 import UpdatePost from "./routes/UpdatePost";
 import MapSearch from "./routes/MapSearch";
-import axios from "axios";
 import "./css/App.css";
 
 function App() {

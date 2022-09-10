@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { url } from "../Url";
-import axios from "axios";
 import styled from "styled-components";
 import { NavDropdown } from "react-bootstrap";
 

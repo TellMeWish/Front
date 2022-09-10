@@ -25,12 +25,10 @@ function Signup() {
     };
     await axios(config)
       .then((res) => {
-        console.log(res);
         alert("등록 완료");
         navigate("/login");
       })
       .catch((err) => {
-        console.log(id, pw, nick);
         alert("실패");
         console.log(err);
       });

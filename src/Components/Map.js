@@ -52,7 +52,6 @@ function Map(props) {
           <Marker lat={center.lat} lng={center.lng}></Marker>
           {places.length !== 0 &&
             places.map((place) => {
-              console.log(place);
               return <Marker place={place} key={place.place_id} text={place.name} lat={place.geometry.location.lat()} lng={place.geometry.location.lng()} />;
             })}
         </GoogleMap>
