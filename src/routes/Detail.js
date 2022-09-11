@@ -857,7 +857,7 @@ function Detail() {
                           ) : (
                             <div style={{ fontSize: "10px", marginTop: "5px" }}>{com.createdAt}</div>
                           )}
-                          {com.secret ? (
+                          {com.secret && com.user.username != username && !post.isMyPost ? (
                             <div style={{ fontSize: "20px", margin: "20px 0", color: "grey" }} id={`replyContent${index}`}>
                               비밀댓글입니다.
                             </div>

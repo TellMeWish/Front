@@ -112,7 +112,9 @@ function Profile() {
       { category: "갖고싶은것", count: 0 },
     ];
     items.map((i) => {
-      countCategory[countCategory.findIndex((e) => e.category == i.category)].count += 1;
+      if (i.category) {
+        countCategory[countCategory.findIndex((e) => e.category == i.category)].count += 1;
+      }
     });
     const favCategory = countCategory.reduce((prev, current) => {
       return prev.count >= current.count ? prev : current;
