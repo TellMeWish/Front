@@ -42,7 +42,7 @@ body {
   position: absolute;
   right: 20px;
 }
-@media screen and (max-width: 1190px) {
+@media screen and (max-width: 1220px) {
   .userBox {
     display: none;
   }

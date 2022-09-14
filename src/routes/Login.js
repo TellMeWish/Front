@@ -27,6 +27,7 @@ function Login() {
         navigate("/");
         localStorage.clear();
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("expire", Date.now() + 5000);
         localStorage.setItem("username", res.data.username);
         localStorage.setItem("nickname", res.data.nickname);
         localStorage.setItem("id", res.data.id);

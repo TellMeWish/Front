@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavDropdown } from "react-bootstrap";
 
@@ -21,7 +21,6 @@ let Select = styled.select`
   }
 `;
 function NavBar() {
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -31,6 +30,9 @@ function NavBar() {
       window.location.reload();
     }
   };
+  useEffect(() => {
+    if (Date.now() >= localStorage.getItem("expire")) localStorage.clear();
+  });
   return (
     <div className="nav_bar" style={{ zIndex: "5" }}>
       <Menu
@@ -117,7 +119,7 @@ function NavBar() {
           </div>
         </div>
         {!localStorage.getItem("token") ? (
-          <div className="userBox">
+          <div className="userBox" style={{ marginRight: "30px" }}>
             <Menu
               onClick={() => {
                 navigate("/login");
@@ -134,7 +136,7 @@ function NavBar() {
             </Menu>
           </div>
         ) : (
-          <div className="userBox">
+          <div className="userBox" style={{ marginRight: "30px" }}>
             <Menu
               onClick={() => {
                 navigate("/profile");
