@@ -82,6 +82,7 @@ function Profile() {
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
   const [list, setList] = useState(0);
+  const [count, setCount] = useState(0);
   const [items, setItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
   const [commentedItems, setCommentedItems] = useState([]);
@@ -124,7 +125,23 @@ function Profile() {
   }, [items]);
 
   const handleChange = (e) => {
+    itemCount(e.target.value);
     setProgress(e.target.value);
+  };
+  const itemCount = (n) => {
+    console.log(n);
+    if (!n) {
+      setCount(items.length);
+    } else {
+      let length = items?.filter((e, i) => {
+        if (e.post_user_id.username == username) {
+          return e.isProgress == n;
+        } else {
+          return e.myProgress == n;
+        }
+      });
+      setCount(length.length);
+    }
   };
 
   const getCommentSize = (post) => {
@@ -148,7 +165,7 @@ function Profile() {
       },
     };
     axios(config).then((res) => {
-      console.log(res.data);
+      setCount(res.data.postList.length);
       let arr = res.data.postList;
       setItems([...arr]);
       res.data.postList.map((post) => {
@@ -303,17 +320,17 @@ function Profile() {
             <Form>
               {["radio"].map((type) => (
                 <div key={`inline-radio`} className="mb-3">
-                  <Form.Check inline label="전체" name="group1" value="" checked={progress === ""} onChange={handleChange} />
+                  <Form.Check id="one" inline label="전체" name="group1" value="" checked={progress === ""} onChange={handleChange} />
                   <Form.Check inline label="진행 예정" name="group1" value="0" checked={progress === "0"} onChange={handleChange} />
                   <Form.Check inline label="진행 중" name="group1" value="1" checked={progress === "1"} onChange={handleChange} />
                   <Form.Check inline label="진행 완료" name="group1" value="2" checked={progress === "2"} onChange={handleChange} />
                 </div>
               ))}
             </Form>
-            <div>버킷리스트 목록 ({items.length})</div>
+            <div>버킷리스트 목록 ({count})</div>
             <div className="postList">
               {items?.map((item, i) => {
-                if (!progress || item.isProgress == progress)
+                if (!progress || (item.post_user_id.username == username && item.isProgress == progress) || (item.post_user_id.username != username && item.myProgress == progress))
                   return (
                     <Post
                       onClick={() => {
