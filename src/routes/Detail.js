@@ -533,8 +533,8 @@ function Detail() {
             })}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            {post.isLike ? (
-              <div style={{ display: "flex", alignItems: "flex-end" }}>
+            <div style={{ display: "flex", alignItems: "flex-end" }}>
+              {post.isLike ? (
                 <Like
                   className="animation"
                   onClick={() => {
@@ -542,31 +542,7 @@ function Detail() {
                   }}
                   src="/img/like.png"
                 />
-                {post.likeCount}
-                {!post.isMyPost && !post.isShare ? (
-                  <div style={{ marginLeft: "10px" }}>
-                    <FaRegShareSquare
-                      className="animation"
-                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
-                      onClick={() => {
-                        sharePost();
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div style={{ marginLeft: "10px" }}>
-                    <FaShareSquare
-                      className="animation"
-                      style={{ cursor: "pointer", fontSize: "35px", marginLeft: "5px", position: "relative", top: "3px" }}
-                      onClick={() => {
-                        cancelShare();
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div style={{ display: "flex", alignItems: "flex-end" }}>
+              ) : (
                 <Like
                   className="animation"
                   onClick={() => {
@@ -574,8 +550,10 @@ function Detail() {
                   }}
                   src="/img/unlike.png"
                 />
-                {post.likeCount}
-                {!post.isShare ? (
+              )}
+              {post.likeCount}
+              {!post.isMyPost ? (
+                !post.isShare ? (
                   <div style={{ marginLeft: "10px" }}>
                     <FaRegShareSquare
                       className="animation"
@@ -595,9 +573,10 @@ function Detail() {
                       }}
                     />
                   </div>
-                )}
-              </div>
-            )}
+                )
+              ) : null}
+            </div>
+
             {post.isMyPost ? (
               <div>
                 <Btn
