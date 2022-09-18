@@ -110,6 +110,7 @@ function Profile() {
       { category: "음식", count: 0 },
       { category: "취미", count: 0 },
       { category: "갖고싶은것", count: 0 },
+      { category: "기타", count: 0 },
     ];
     items.map((i) => {
       if (i.category) {
@@ -147,6 +148,7 @@ function Profile() {
       },
     };
     axios(config).then((res) => {
+      console.log(res.data);
       let arr = res.data.postList;
       setItems([...arr]);
       res.data.postList.map((post) => {
